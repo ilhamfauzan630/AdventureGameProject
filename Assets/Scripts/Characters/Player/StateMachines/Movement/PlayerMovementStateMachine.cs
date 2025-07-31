@@ -2,6 +2,7 @@ namespace AdventureGame
 {
     public class PlayerMovementStateMachine : StateMachine
     {
+        public Player Player { get; }
         public PlayerIdlingState IdlingState { get; }
 
         public PlayerWalkingState WalkingState { get; }
@@ -10,13 +11,15 @@ namespace AdventureGame
 
         public PlayerSprintingState SprintingState { get; }
 
-        public PlayerMovementStateMachine()
+        public PlayerMovementStateMachine(Player player)
         {
-            IdlingState = new PlayerIdlingState();
+            Player = player;
 
-            WalkingState = new PlayerWalkingState();
-            RunningState = new PlayerRunningState();
-            SprintingState = new PlayerSprintingState();
+            IdlingState = new PlayerIdlingState(this);
+
+            WalkingState = new PlayerWalkingState(this);
+            RunningState = new PlayerRunningState(this);
+            SprintingState = new PlayerSprintingState(this);
         }
     }
 }
