@@ -1,6 +1,6 @@
 namespace AdventureGame
 {
-    public class PlayerSprintingState : PlayerMovementState
+    public class PlayerSprintingState : PlayerGroundedState
     {
         public PlayerSprintingState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {

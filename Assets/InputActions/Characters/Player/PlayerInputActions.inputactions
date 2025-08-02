@@ -15,7 +15,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "WalkToogle",
+                    "name": "WalkToggle",
                     "type": "Button",
                     "id": "2a24a7c2-250e-441d-b06f-c4b3dfe6ee89",
                     "expectedControlType": "Button",
@@ -105,7 +105,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "WalkToogle",
+                    "action": "WalkToggle",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
