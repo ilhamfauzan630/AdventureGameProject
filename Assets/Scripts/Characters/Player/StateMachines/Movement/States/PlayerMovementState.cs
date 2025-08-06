@@ -116,6 +116,18 @@ namespace AdventureGame
             stateMachine.ReusableData.DampedTargetRotationPassedTime.y = 0f;
         }
 
+        public virtual void OnAnimationEnterEvent()
+        {
+        }
+
+        public virtual void OnAnimationExitEvent()
+        {
+        }
+
+        public virtual void OnAnimationTransitionEvent()
+        {
+        }
+
         #endregion
 
         #region Reusable Methods

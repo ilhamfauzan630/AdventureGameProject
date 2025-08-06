@@ -65,13 +65,6 @@ namespace AdventureGame
         #endregion
 
         #region Reusable Methods
-        protected override void AddInputActionsCallback()
-        {
-            base.AddInputActionsCallback();
-
-            stateMachine.Player.Input.PlayerActions.Movement.canceled += OnMovementCanceled;
-        }
-
         protected virtual void OnMove()
         {
             if (stateMachine.ReusableData.ShouldWalk)
@@ -84,11 +77,22 @@ namespace AdventureGame
             stateMachine.ChangeState(stateMachine.RunningState);
         }
 
+        protected override void AddInputActionsCallback()
+        {
+            base.AddInputActionsCallback();
+
+            stateMachine.Player.Input.PlayerActions.Movement.canceled += OnMovementCanceled;
+
+            stateMachine.Player.Input.PlayerActions.Dash.started += OnDashStarted;
+        }
+
         protected override void RemoveInputActionsCallback()
         {
             base.RemoveInputActionsCallback();
 
             stateMachine.Player.Input.PlayerActions.Movement.canceled -= OnMovementCanceled;
+
+            stateMachine.Player.Input.PlayerActions.Dash.started -= OnDashStarted;
         }
         #endregion
 
@@ -97,6 +101,11 @@ namespace AdventureGame
         {
             stateMachine.ChangeState(stateMachine.IdlingState);
         }       
+
+        protected virtual void OnDashStarted(InputAction.CallbackContext context)
+        {
+            stateMachine.ChangeState(stateMachine.DashingState);
+        }
         #endregion
     }
 }
