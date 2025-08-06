@@ -1,11 +1,16 @@
+using System;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace AdventureGame
 {
     public class PlayerRunningState : PlayerMovingState
     {
+        private PlayerSprintData sprintData;
+        private float startTime;
         public PlayerRunningState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
+            sprintData = movementData.SprintData;
         }
 
         #region IState Methods
@@ -14,6 +19,39 @@ namespace AdventureGame
             base.Enter();
 
             stateMachine.ReusableData.MovementSpeedModifier = movementData.RunData.SpeedModifier;
+
+            startTime = Time.time;
+
+            if (Time.time < startTime + sprintData.RunToWalkTime)
+            {
+                return;
+            }
+
+            StopRunning();
+        }
+
+        #region Maint Methods
+        private void StopRunning()
+        {
+            if (stateMachine.ReusableData.MovementInput == Vector2.zero)
+            {
+                stateMachine.ChangeState(stateMachine.IdlingState);
+
+                return;
+            }
+
+            stateMachine.ChangeState(stateMachine.WalkingState);
+        }
+        #endregion
+
+        public override void Update()
+        {
+            base.Update();
+
+            if (!stateMachine.ReusableData.ShouldWalk)
+            {
+                return;
+            }
         }
 
         #endregion
