@@ -1,4 +1,3 @@
-using System;
 using UnityEngine.InputSystem;
 
 namespace AdventureGame
@@ -19,6 +18,10 @@ namespace AdventureGame
         #endregion
 
         #region Input Methods
+        protected override void OnMovementCanceled(InputAction.CallbackContext context)
+        {
+            stateMachine.ChangeState(stateMachine.LightStoppingState);
+        }
         protected override void OnwalkToggleStarted(InputAction.CallbackContext context)
         {
             base.OnwalkToggleStarted(context);

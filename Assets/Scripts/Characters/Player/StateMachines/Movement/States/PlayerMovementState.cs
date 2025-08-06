@@ -213,6 +213,21 @@ namespace AdventureGame
             stateMachine.Player.Input.PlayerActions.WalkToggle.started -= OnwalkToggleStarted;
         }
 
+        protected void DecelerateHorizontally()
+        {
+            Vector3 PlayerHorizontalVelocity = GetPlayerHorizontalVelocity();
+
+            stateMachine.Player.Rigidbody.AddForce(-PlayerHorizontalVelocity * stateMachine.ReusableData.MovementDecelerationForce, ForceMode.Acceleration);
+        }
+
+        protected bool IsMovingHorizontally(float minimumMagnitude = 0.1f)
+        {
+            Vector3 playerHorizontalVelocity = GetPlayerHorizontalVelocity();
+
+            Vector3 playerHorizontalMovement = new Vector2(playerHorizontalVelocity.x, playerHorizontalVelocity.z);
+
+            return playerHorizontalMovement.magnitude > minimumMagnitude;
+        }
         #endregion
 
         #region Input Methods

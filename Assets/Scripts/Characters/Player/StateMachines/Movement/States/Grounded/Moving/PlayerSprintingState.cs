@@ -68,6 +68,10 @@ namespace AdventureGame
         #endregion
 
         #region Reusable Methods
+        protected override void OnMovementCanceled(InputAction.CallbackContext context)
+        {
+            stateMachine.ChangeState(stateMachine.HardStoppingState);
+        }
         protected override void AddInputActionsCallback()
         {
             base.AddInputActionsCallback();

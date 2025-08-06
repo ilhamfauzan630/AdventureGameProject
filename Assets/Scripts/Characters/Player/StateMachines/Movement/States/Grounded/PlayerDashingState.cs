@@ -29,13 +29,11 @@ namespace AdventureGame
             startTime = Time.time;
         }
 
-        public override void OnAnimationEnterEvent()
-        {
-            base.OnAnimationEnterEvent();
-
+        public override void OnAnimationTransitionEvent()
+        { 
             if (stateMachine.ReusableData.MovementInput == Vector2.zero)
             {
-                stateMachine.ChangeState(stateMachine.IdlingState);
+                stateMachine.ChangeState(stateMachine.HardStoppingState);
 
                 return;
             }
