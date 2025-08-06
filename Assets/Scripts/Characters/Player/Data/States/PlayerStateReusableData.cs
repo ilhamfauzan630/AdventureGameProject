@@ -8,6 +8,7 @@ namespace AdventureGame
     {
         public Vector2 MovementInput { get; set; }
         public float MovementSpeedModifier { get; set; } = 1;
+        public float MovementOnSlopeSpeedModifier { get; set; } = 1;
 
         public bool ShouldWalk { get; set; }
 

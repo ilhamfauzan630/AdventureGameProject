@@ -126,7 +126,7 @@ namespace AdventureGame
 
         protected float getMovementSpeed()
         {
-            return movementData.BaseSpeed * stateMachine.ReusableData.MovementSpeedModifier;
+            return movementData.BaseSpeed * stateMachine.ReusableData.MovementSpeedModifier * stateMachine.ReusableData.MovementOnSlopeSpeedModifier;
         }
 
         protected Vector3 GetPlayerHorizontalVelocity()
@@ -136,6 +136,11 @@ namespace AdventureGame
             PlayerHorizontalVelocity.y = 0f;
 
             return PlayerHorizontalVelocity;
+        }
+
+        protected Vector3 GetPlayerVelocity()
+        {
+            return new Vector3(0f, stateMachine.Player.Rigidbody.velocity.y, 0f);
         }
 
         protected void RotateTowardsTargetRotation()
