@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,9 +7,10 @@ namespace AdventureGame
     public class PlayerDashingState : PlayerGroundedState
     {
         private PlayerDashData dashData;
-
         private float startTime;
         private int ConsecutiveDashesUsed;
+        private bool shouldKeepRotating;
+
         public PlayerDashingState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
             dashData = movementData.DashData;
@@ -22,15 +24,38 @@ namespace AdventureGame
 
             stateMachine.ReusableData.MovementSpeedModifier = dashData.SpeedModifier;
 
+            stateMachine.ReusableData.RotationData = dashData.RotationData;
+
             AddForceOnTransitionFromStationaryState();
+
+            shouldKeepRotating = stateMachine.ReusableData.MovementInput != Vector2.zero;
 
             UpdateConsecutiveDashes();
 
             startTime = Time.time;
         }
 
+        public override void Exit()
+        {
+            base.Exit();
+
+            SetBaseRotationData();
+        }
+
+        public override void PhysicsUpdate()
+        {
+            base.PhysicsUpdate();
+
+            if (!shouldKeepRotating)
+            {
+                return;
+            }
+
+            RotateTowardsTargetRotation();
+        }
+
         public override void OnAnimationTransitionEvent()
-        { 
+        {
             if (stateMachine.ReusableData.MovementInput == Vector2.zero)
             {
                 stateMachine.ChangeState(stateMachine.HardStoppingState);
@@ -53,6 +78,8 @@ namespace AdventureGame
             Vector3 characterRotationDirection = stateMachine.Player.transform.forward;
 
             characterRotationDirection.y = 0f;
+
+            UpdateTargetRotation(characterRotationDirection, false);
 
             stateMachine.Player.Rigidbody.velocity = characterRotationDirection * getMovementSpeed();
         }
@@ -80,10 +107,30 @@ namespace AdventureGame
         }
         #endregion
 
+        #region Reusable Methods
+        protected override void AddInputActionsCallback()
+        {
+            base.AddInputActionsCallback();
+
+            stateMachine.Player.Input.PlayerActions.Movement.performed += OnMovementPerformed;
+        }
+
+        protected override void RemoveInputActionsCallback()
+        {
+            base.RemoveInputActionsCallback();
+
+            stateMachine.Player.Input.PlayerActions.Movement.performed -= OnMovementPerformed;
+        }
+        #endregion
+
         #region Input Methods
 
         protected override void OnMovementCanceled(InputAction.CallbackContext context)
         {
+        }
+        private void OnMovementPerformed(InputAction.CallbackContext context)
+        {
+            shouldKeepRotating = true;
         }
         protected override void OnDashStarted(InputAction.CallbackContext context)
         {

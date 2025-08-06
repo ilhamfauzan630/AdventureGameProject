@@ -22,6 +22,8 @@ namespace AdventureGame
         {
             base.PhysicsUpdate();
 
+            RotateTowardsTargetRotation();
+
             if (!IsMovingHorizontally())
             {
                 return;

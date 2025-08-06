@@ -21,7 +21,7 @@ namespace AdventureGame
 
         private void InitializeData()
         {
-            stateMachine.ReusableData.TimeToReachTargetRotation = movementData.BaseRotationData.TargetRotationReachTime;
+            SetBaseRotationData();
         }
 
         #region Istate Methods
@@ -131,6 +131,12 @@ namespace AdventureGame
         #endregion
 
         #region Reusable Methods
+        protected void SetBaseRotationData()
+        {
+            stateMachine.ReusableData.RotationData = movementData.BaseRotationData;
+            stateMachine.ReusableData.TimeToReachTargetRotation = stateMachine.ReusableData.RotationData.TargetRotationReachTime;
+        }
+        
         protected Vector3 GetMovementInputDirection()
         {
             return new Vector3(stateMachine.ReusableData.MovementInput.x, 0f, stateMachine.ReusableData.MovementInput.y);

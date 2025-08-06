@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
 namespace AdventureGame
@@ -51,5 +50,7 @@ namespace AdventureGame
                 return ref dampedTargetRotationPassedTime;
             }
         }
+
+        public PlayerRotationData RotationData { get; set; }
     }
 }
