@@ -17,6 +17,8 @@ namespace AdventureGame
 
             stateMachine.ReusableData.MovementSpeedModifier = 0f;
 
+            stateMachine.ReusableData.CurrentJumpForce = airborneData.JumpData.StationaryForce;
+
             ResetVelocity();
         }
 

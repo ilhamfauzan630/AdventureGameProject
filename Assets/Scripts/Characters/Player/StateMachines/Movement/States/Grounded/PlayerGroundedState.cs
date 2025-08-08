@@ -13,6 +13,12 @@ namespace AdventureGame
         }
 
         #region IState Method
+        public override void Enter()
+        {
+            base.Enter();
+
+            UpdateShouldSprintState();
+        }
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
@@ -22,6 +28,21 @@ namespace AdventureGame
         #endregion
 
         #region Main Methods
+        private void UpdateShouldSprintState()
+        {
+            if (!stateMachine.ReusableData.ShouldSprint)
+            {
+                return;
+            }
+
+            if (stateMachine.ReusableData.MovementInput != Vector2.zero)
+            {
+                return;
+            }
+
+            stateMachine.ReusableData.ShouldSprint = false;
+        }
+
         private void Float()
         {
             Vector3 capsuleColliderCenterInWorldSpace = stateMachine.Player.ColliderUtility.CapsuleColliderData.Collider.bounds.center;
@@ -46,7 +67,7 @@ namespace AdventureGame
                     return;
                 }
 
-                float amountToLift = distanceFloatingPoint * slopeData.stepReachForce - GetPlayerVelocity().y;
+                float amountToLift = distanceFloatingPoint * slopeData.stepReachForce - GetPlayerVerticalVelocity().y;
 
                 Vector3 liftForce = new Vector3(0f, amountToLift, 0f);
 
@@ -67,6 +88,12 @@ namespace AdventureGame
         #region Reusable Methods
         protected virtual void OnMove()
         {
+            if (stateMachine.ReusableData.ShouldSprint)
+            {
+                stateMachine.ChangeState(stateMachine.SprintingState);
+
+                return;
+            }
             if (stateMachine.ReusableData.ShouldWalk)
             {
                 stateMachine.ChangeState(stateMachine.WalkingState);
@@ -84,6 +111,8 @@ namespace AdventureGame
             stateMachine.Player.Input.PlayerActions.Movement.canceled += OnMovementCanceled;
 
             stateMachine.Player.Input.PlayerActions.Dash.started += OnDashStarted;
+
+            stateMachine.Player.Input.PlayerActions.Jump.started += OnJumpStarted;
         }
 
         protected override void RemoveInputActionsCallback()
@@ -93,6 +122,8 @@ namespace AdventureGame
             stateMachine.Player.Input.PlayerActions.Movement.canceled -= OnMovementCanceled;
 
             stateMachine.Player.Input.PlayerActions.Dash.started -= OnDashStarted;
+
+            stateMachine.Player.Input.PlayerActions.Jump.started -= OnJumpStarted;
         }
         #endregion
 
@@ -100,11 +131,16 @@ namespace AdventureGame
         protected virtual void OnMovementCanceled(InputAction.CallbackContext context)
         {
             stateMachine.ChangeState(stateMachine.IdlingState);
-        }       
+        }
 
         protected virtual void OnDashStarted(InputAction.CallbackContext context)
         {
             stateMachine.ChangeState(stateMachine.DashingState);
+        }
+        
+        protected virtual void OnJumpStarted(InputAction.CallbackContext context)
+        {
+            stateMachine.ChangeState(stateMachine.JumpingState);
         }
         #endregion
     }

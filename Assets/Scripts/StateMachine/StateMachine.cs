@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace AdventureGame
 {
     public abstract class StateMachine
@@ -41,6 +43,11 @@ namespace AdventureGame
         public void OnAnimationTransitionEvent()
         {
             currentState?.OnAnimationTransitionEvent();
+        }
+
+        public void OnTriggerEnter(Collider collider)
+        {
+            currentState?.OnTriggerEnter(collider);
         }
     }
 }

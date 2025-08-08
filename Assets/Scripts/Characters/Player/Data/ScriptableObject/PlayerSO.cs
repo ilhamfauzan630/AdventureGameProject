@@ -6,6 +6,7 @@ namespace AdventureGame
     public class PlayerSO : ScriptableObject
     {
         [field: SerializeField] public PlayerGroundedData GroundedData { get; private set; }
+        [field: SerializeField] public PlayerAirborneData AriborneData { get; private set; }
 
 
     }

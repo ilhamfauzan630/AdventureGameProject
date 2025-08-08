@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace AdventureGame
 {
     public interface IState
@@ -15,5 +17,7 @@ namespace AdventureGame
         public void OnAnimationEnterEvent();
         public void OnAnimationExitEvent();
         public void OnAnimationTransitionEvent();
+
+        public void OnTriggerEnter(Collider colider);
     }
 }

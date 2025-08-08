@@ -9,12 +9,14 @@ namespace AdventureGame
         protected PlayerMovementStateMachine stateMachine;
 
         protected PlayerGroundedData movementData;
+        protected PlayerAirborneData airborneData;
 
         public PlayerMovementState(PlayerMovementStateMachine playerMovementStateMachine)
         {
             stateMachine = playerMovementStateMachine;
 
             movementData = stateMachine.Player.Data.GroundedData;
+            airborneData = stateMachine.Player.Data.AriborneData;
 
             InitializeData();
         }
@@ -128,6 +130,16 @@ namespace AdventureGame
         {
         }
 
+        public virtual void OnTriggerEnter(Collider colider)
+        {
+            if (stateMachine.Player.LayerData.IsGroundLayer(colider.gameObject.layer))
+            {
+                OnContactWithGround(colider);
+
+                return;
+            }
+        }
+
         #endregion
 
         #region Reusable Methods
@@ -156,7 +168,7 @@ namespace AdventureGame
             return PlayerHorizontalVelocity;
         }
 
-        protected Vector3 GetPlayerVelocity()
+        protected Vector3 GetPlayerVerticalVelocity()
         {
             return new Vector3(0f, stateMachine.Player.Rigidbody.velocity.y, 0f);
         }
@@ -226,6 +238,13 @@ namespace AdventureGame
             stateMachine.Player.Rigidbody.AddForce(-PlayerHorizontalVelocity * stateMachine.ReusableData.MovementDecelerationForce, ForceMode.Acceleration);
         }
 
+        protected void DecelerateVertically()
+        {
+            Vector3 PlayerVerticalVelocity = GetPlayerVerticalVelocity();
+
+            stateMachine.Player.Rigidbody.AddForce(-PlayerVerticalVelocity * stateMachine.ReusableData.MovementDecelerationForce, ForceMode.Acceleration);
+        }
+
         protected bool IsMovingHorizontally(float minimumMagnitude = 0.1f)
         {
             Vector3 playerHorizontalVelocity = GetPlayerHorizontalVelocity();
@@ -233,6 +252,20 @@ namespace AdventureGame
             Vector3 playerHorizontalMovement = new Vector2(playerHorizontalVelocity.x, playerHorizontalVelocity.z);
 
             return playerHorizontalMovement.magnitude > minimumMagnitude;
+        }
+
+        protected bool IsMovingUp(float minimumVelocity = 0.1f)
+        {
+            return GetPlayerVerticalVelocity().y > minimumVelocity;
+        }
+
+        protected bool IsMovingDown(float minimumVelocity = 0.1f)
+        {
+            return GetPlayerVerticalVelocity().y < -minimumVelocity;
+        }
+
+        protected virtual void OnContactWithGround(Collider collider)
+        {
         }
         #endregion
 
