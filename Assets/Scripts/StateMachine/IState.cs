@@ -19,5 +19,6 @@ namespace AdventureGame
         public void OnAnimationTransitionEvent();
 
         public void OnTriggerEnter(Collider colider);
+        public void OnTriggerExit(Collider colider);
     }
 }

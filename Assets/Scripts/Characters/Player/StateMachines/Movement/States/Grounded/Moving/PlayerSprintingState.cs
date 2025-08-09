@@ -97,6 +97,13 @@ namespace AdventureGame
 
             stateMachine.Player.Input.PlayerActions.Sprint.performed -= OnSprintPerformed;
         }
+
+        protected override void OnFall()
+        {
+            shouldResetSprintState = false;
+            
+            base.OnFall();
+        }
         #endregion
 
         #region Input Methods
@@ -104,7 +111,7 @@ namespace AdventureGame
         protected override void OnJumpStarted(InputAction.CallbackContext context)
         {
             shouldResetSprintState = false;
-            
+
             base.OnJumpStarted(context);
         }
         private void OnSprintPerformed(InputAction.CallbackContext context)

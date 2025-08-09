@@ -140,9 +140,29 @@ namespace AdventureGame
             }
         }
 
+        public void OnTriggerExit(Collider collider)
+        {
+            if (stateMachine.Player.LayerData.IsGroundLayer(collider.gameObject.layer))
+            {
+                OnContactWithGroundExited(collider);
+
+                return;
+            }
+        }
+
         #endregion
 
         #region Reusable Methods
+        protected virtual void AddInputActionsCallback()
+        {
+            stateMachine.Player.Input.PlayerActions.WalkToggle.started += OnwalkToggleStarted;
+        }
+
+        protected virtual void RemoveInputActionsCallback()
+        {
+            stateMachine.Player.Input.PlayerActions.WalkToggle.started -= OnwalkToggleStarted;
+        }
+
         protected void SetBaseRotationData()
         {
             stateMachine.ReusableData.RotationData = movementData.BaseRotationData;
@@ -220,15 +240,11 @@ namespace AdventureGame
             stateMachine.Player.Rigidbody.velocity = Vector3.zero;
         }
 
-        protected virtual void AddInputActionsCallback()
+        protected void ResetVerticalVelocity()
         {
-            stateMachine.Player.Input.PlayerActions.WalkToggle.started += OnwalkToggleStarted;
-        }
+            Vector3 playerHorizontalVelocity = GetPlayerHorizontalVelocity();
 
-
-        protected virtual void RemoveInputActionsCallback()
-        {
-            stateMachine.Player.Input.PlayerActions.WalkToggle.started -= OnwalkToggleStarted;
+            stateMachine.Player.Rigidbody.velocity = playerHorizontalVelocity;
         }
 
         protected void DecelerateHorizontally()
@@ -265,6 +281,10 @@ namespace AdventureGame
         }
 
         protected virtual void OnContactWithGround(Collider collider)
+        {
+        }
+
+        protected virtual void OnContactWithGroundExited(Collider collider)
         {
         }
         #endregion
