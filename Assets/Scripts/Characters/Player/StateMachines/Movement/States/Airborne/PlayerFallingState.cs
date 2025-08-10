@@ -6,6 +6,9 @@ namespace AdventureGame
     public class PlayerFallingState : PlayerAirborneState
     {
         private PlayerFallData fallData;
+
+        private Vector3 PlayerPositionOnEnter;
+
         public PlayerFallingState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
             fallData = airborneData.FallData;
@@ -15,6 +18,8 @@ namespace AdventureGame
         public override void Enter()
         {
             base.Enter();
+
+            PlayerPositionOnEnter = stateMachine.Player.transform.position;
 
             stateMachine.ReusableData.MovementSpeedModifier = 0f;
 
@@ -34,6 +39,26 @@ namespace AdventureGame
         #region Reusable Methods
         protected override void ResetSprintState()
         {
+        }
+        protected override void OnContactWithGround(Collider collider)
+        {
+            float fallDistance = Mathf.Abs(PlayerPositionOnEnter.y - stateMachine.Player.transform.position.y);
+
+            if (fallDistance < fallData.MinimumDistanceToBeConsideredHardFall)
+            {
+                stateMachine.ChangeState(stateMachine.LightLandingState);
+
+                return;
+            }
+
+            if (stateMachine.ReusableData.ShouldSprint && !stateMachine.ReusableData.ShouldSprint || stateMachine.ReusableData.MovementInput == Vector2.zero)
+            {
+                stateMachine.ChangeState(stateMachine.HardLandingState);
+
+                return;
+            }
+
+            stateMachine.ChangeState(stateMachine.RollingState);
         }
         #endregion
 

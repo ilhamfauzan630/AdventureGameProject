@@ -17,10 +17,10 @@ namespace AdventureGame
         }
         #endregion
 
-        #region Reusable Methods 
+        #region Reusable Methods
         protected override void OnContactWithGround(Collider collider)
         {
-            stateMachine.ChangeState(stateMachine.IdlingState);
+            stateMachine.ChangeState(stateMachine.LightLandingState);
         }
 
         protected virtual void ResetSprintState()
