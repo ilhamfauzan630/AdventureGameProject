@@ -28,7 +28,7 @@ namespace AdventureGame
 
             stateMachine.ReusableData.RotationData = dashData.RotationData;
 
-            AddForceOnTransitionFromStationaryState();
+            Dash();
 
             shouldKeepRotating = stateMachine.ReusableData.MovementInput != Vector2.zero;
 
@@ -70,20 +70,22 @@ namespace AdventureGame
         #endregion
 
         #region Main Methods
-        private void AddForceOnTransitionFromStationaryState()
+        private void Dash()
         {
+            Vector3 dashDirection = stateMachine.Player.transform.forward;
+
+            dashDirection.y = 0f;
+
+            UpdateTargetRotation(dashDirection, false);
+
             if (stateMachine.ReusableData.MovementInput != Vector2.zero)
             {
-                return;
+                UpdateTargetRotation(GetMovementInputDirection());
+
+                dashDirection = GetTargetRotationDirection(stateMachine.ReusableData.CurrentTargetRotation.y);
             }
 
-            Vector3 characterRotationDirection = stateMachine.Player.transform.forward;
-
-            characterRotationDirection.y = 0f;
-
-            UpdateTargetRotation(characterRotationDirection, false);
-
-            stateMachine.Player.Rigidbody.velocity = characterRotationDirection * getMovementSpeed();
+            stateMachine.Player.Rigidbody.velocity = dashDirection * getMovementSpeed(false);
         }
 
         private void UpdateConsecutiveDashes()

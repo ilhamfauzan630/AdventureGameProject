@@ -31,6 +31,18 @@ namespace AdventureGame
             stateMachine.Player.Input.PlayerActions.Movement.Enable();
         }
 
+        public override void PhysicsUpdate()
+        {
+            base.PhysicsUpdate();
+
+            if (!IsMovingHorizontally())
+            {
+                return;
+            }
+
+            ResetVelocity();
+        }
+
         public override void OnAnimationExitEvent()
         {
             stateMachine.Player.Input.PlayerActions.Movement.Enable();

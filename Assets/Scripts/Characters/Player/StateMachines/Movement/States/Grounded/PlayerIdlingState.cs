@@ -38,6 +38,17 @@ namespace AdventureGame
             OnMove();
         }
 
+        public override void PhysicsUpdate()
+        {
+            base.PhysicsUpdate();
+
+            if (!IsMovingHorizontally())
+            {
+                return;
+            }
+
+            ResetVelocity();
+        }
         #endregion
     }
 }

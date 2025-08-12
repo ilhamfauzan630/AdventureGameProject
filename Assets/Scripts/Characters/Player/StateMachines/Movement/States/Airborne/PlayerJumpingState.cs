@@ -88,6 +88,8 @@ namespace AdventureGame
 
             if (shouldKeepRotating)
             {
+                UpdateTargetRotation(GetMovementInputDirection());
+                
                 JumpDirection = GetTargetRotationDirection(stateMachine.ReusableData.CurrentTargetRotation.y);
             }
 

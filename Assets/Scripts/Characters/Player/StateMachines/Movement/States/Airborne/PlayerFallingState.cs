@@ -42,7 +42,7 @@ namespace AdventureGame
         }
         protected override void OnContactWithGround(Collider collider)
         {
-            float fallDistance = Mathf.Abs(PlayerPositionOnEnter.y - stateMachine.Player.transform.position.y);
+            float fallDistance = PlayerPositionOnEnter.y - stateMachine.Player.transform.position.y;
 
             if (fallDistance < fallData.MinimumDistanceToBeConsideredHardFall)
             {

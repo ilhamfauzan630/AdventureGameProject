@@ -192,9 +192,16 @@ namespace AdventureGame
             return new Vector3(stateMachine.ReusableData.MovementInput.x, 0f, stateMachine.ReusableData.MovementInput.y);
         }
 
-        protected float getMovementSpeed()
+        protected float getMovementSpeed(bool shouldConsideredSlopes = true)
         {
-            return movementData.BaseSpeed * stateMachine.ReusableData.MovementSpeedModifier * stateMachine.ReusableData.MovementOnSlopeSpeedModifier;
+            float movementSpeed = movementData.BaseSpeed * stateMachine.ReusableData.MovementSpeedModifier;
+
+            if (shouldConsideredSlopes)
+            {
+                movementSpeed *= stateMachine.ReusableData.MovementOnSlopeSpeedModifier; 
+            }
+
+            return movementSpeed;
         }
 
         protected Vector3 GetPlayerHorizontalVelocity()
