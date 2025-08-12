@@ -20,9 +20,9 @@ namespace AdventureGame
         #region IState Methods
         public override void Enter()
         {
-            base.Enter();
-
             stateMachine.ReusableData.MovementSpeedModifier = dashData.SpeedModifier;
+
+            base.Enter();
 
             stateMachine.ReusableData.CurrentJumpForce = airborneData.JumpData.StrongForce;
 
@@ -126,10 +126,6 @@ namespace AdventureGame
         #endregion
 
         #region Input Methods
-
-        protected override void OnMovementCanceled(InputAction.CallbackContext context)
-        {
-        }
         private void OnMovementPerformed(InputAction.CallbackContext context)
         {
             shouldKeepRotating = true;

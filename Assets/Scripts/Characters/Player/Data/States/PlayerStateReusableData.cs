@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AdventureGame
@@ -10,6 +11,8 @@ namespace AdventureGame
         public float MovementOnSlopeSpeedModifier { get; set; } = 1;
         public float MovementDecelerationForce { get; set; } = 1;
 
+        public List<PlayerCameraRecenteringData> SidewaysCameraRecenteringData { get; set; }
+        public List<PlayerCameraRecenteringData> BackwardsCameraRecenteringData { get; set; }
 
         public bool ShouldWalk { get; set; }
         public bool ShouldSprint { get; set; }

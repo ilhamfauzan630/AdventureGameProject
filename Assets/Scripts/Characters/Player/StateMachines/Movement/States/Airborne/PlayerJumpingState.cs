@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace AdventureGame
 {
@@ -122,6 +123,12 @@ namespace AdventureGame
             stateMachine.Player.Rigidbody.AddForce(jumpForce, ForceMode.VelocityChange);
         }
 
+        #endregion
+
+        #region Input Methods
+        protected override void OnMovementCanceled(InputAction.CallbackContext context)
+        {
+        }
         #endregion
     }
 }

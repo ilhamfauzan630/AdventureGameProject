@@ -18,6 +18,8 @@ namespace AdventureGame
             base.Enter();
 
             UpdateShouldSprintState();
+
+            UpdateCameraRecenteringState(stateMachine.ReusableData.MovementInput);
         }
         public override void PhysicsUpdate()
         {
@@ -79,7 +81,12 @@ namespace AdventureGame
         {
             float slopeSpeedModifier = movementData.SlopeSpeedAngles.Evaluate(angle);
 
-            stateMachine.ReusableData.MovementOnSlopeSpeedModifier = slopeSpeedModifier;
+            if (stateMachine.ReusableData.MovementOnSlopeSpeedModifier != slopeSpeedModifier)
+            {
+                stateMachine.ReusableData.MovementOnSlopeSpeedModifier = slopeSpeedModifier;
+
+                UpdateCameraRecenteringState(stateMachine.ReusableData.MovementInput);
+            }
 
             return slopeSpeedModifier;
         }
@@ -118,8 +125,6 @@ namespace AdventureGame
         {
             base.AddInputActionsCallback();
 
-            stateMachine.Player.Input.PlayerActions.Movement.canceled += OnMovementCanceled;
-
             stateMachine.Player.Input.PlayerActions.Dash.started += OnDashStarted;
 
             stateMachine.Player.Input.PlayerActions.Jump.started += OnJumpStarted;
@@ -128,8 +133,6 @@ namespace AdventureGame
         protected override void RemoveInputActionsCallback()
         {
             base.RemoveInputActionsCallback();
-
-            stateMachine.Player.Input.PlayerActions.Movement.canceled -= OnMovementCanceled;
 
             stateMachine.Player.Input.PlayerActions.Dash.started -= OnDashStarted;
 
@@ -160,10 +163,6 @@ namespace AdventureGame
         #endregion
 
         #region Input Methods
-        protected virtual void OnMovementCanceled(InputAction.CallbackContext context)
-        {
-            stateMachine.ChangeState(stateMachine.IdlingState);
-        }
 
         protected virtual void OnDashStarted(InputAction.CallbackContext context)
         {
