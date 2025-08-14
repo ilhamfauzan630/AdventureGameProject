@@ -1,13 +1,10 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace AdventureGame
 {
-    public class PlayerSprintingState : PlayerGroundedState
+    public class PlayerSprintingState : PlayerMovingState
     {
-        private PlayerSprintData sprintData;
-
         private float startTime;
 
         private bool keepSprinting;
@@ -15,34 +12,40 @@ namespace AdventureGame
 
         public PlayerSprintingState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
-            sprintData = movementData.SprintData;
         }
 
-        #region IState Methods
         public override void Enter()
         {
-            stateMachine.ReusableData.MovementSpeedModifier = sprintData.SpeedModifier;
+            stateMachine.ReusableData.MovementSpeedModifier = groundedData.SprintData.SpeedModifier;
 
             base.Enter();
 
+            StartAnimation(stateMachine.Player.AnimationData.SprintParameterHash);
+
             stateMachine.ReusableData.CurrentJumpForce = airborneData.JumpData.StrongForce;
+
+            startTime = Time.time;
 
             shouldResetSprintState = true;
 
-            startTime = Time.time;
+            if (!stateMachine.ReusableData.ShouldSprint)
+            {
+                keepSprinting = false;
+            }
         }
 
         public override void Exit()
         {
             base.Exit();
 
+            StopAnimation(stateMachine.Player.AnimationData.SprintParameterHash);
+
             if (shouldResetSprintState)
             {
                 keepSprinting = false;
+
                 stateMachine.ReusableData.ShouldSprint = false;
             }
-
-            keepSprinting = false;
         }
 
         public override void Update()
@@ -54,7 +57,7 @@ namespace AdventureGame
                 return;
             }
 
-            if (Time.time < startTime + sprintData.SprintToRunTime)
+            if (Time.time < startTime + groundedData.SprintData.SprintToRunTime)
             {
                 return;
             }
@@ -62,7 +65,6 @@ namespace AdventureGame
             StopSprinting();
         }
 
-        #region Main Methods
         private void StopSprinting()
         {
             if (stateMachine.ReusableData.MovementInput == Vector2.zero)
@@ -75,40 +77,33 @@ namespace AdventureGame
             stateMachine.ChangeState(stateMachine.RunningState);
         }
 
-        #endregion
+        protected override void AddInputActionsCallbacks()
+        {
+            base.AddInputActionsCallbacks();
 
-        #endregion
+            stateMachine.Player.Input.PlayerActions.Sprint.performed += OnSprintPerformed;
+        }
 
-        #region Reusable Methods
+        protected override void RemoveInputActionsCallbacks()
+        {
+            base.RemoveInputActionsCallbacks();
+
+            stateMachine.Player.Input.PlayerActions.Sprint.performed -= OnSprintPerformed;
+        }
+
+        private void OnSprintPerformed(InputAction.CallbackContext context)
+        {
+            keepSprinting = true;
+
+            stateMachine.ReusableData.ShouldSprint = true;
+        }
+
         protected override void OnMovementCanceled(InputAction.CallbackContext context)
         {
             stateMachine.ChangeState(stateMachine.HardStoppingState);
 
             base.OnMovementCanceled(context);
         }
-        protected override void AddInputActionsCallback()
-        {
-            base.AddInputActionsCallback();
-
-            stateMachine.Player.Input.PlayerActions.Sprint.performed += OnSprintPerformed;
-        }
-
-        protected override void RemoveInputActionsCallback()
-        {
-            base.RemoveInputActionsCallback();
-
-            stateMachine.Player.Input.PlayerActions.Sprint.performed -= OnSprintPerformed;
-        }
-
-        protected override void OnFall()
-        {
-            shouldResetSprintState = false;
-            
-            base.OnFall();
-        }
-        #endregion
-
-        #region Input Methods
 
         protected override void OnJumpStarted(InputAction.CallbackContext context)
         {
@@ -116,12 +111,12 @@ namespace AdventureGame
 
             base.OnJumpStarted(context);
         }
-        private void OnSprintPerformed(InputAction.CallbackContext context)
-        {
-            keepSprinting = true;
 
-            stateMachine.ReusableData.ShouldSprint = true;
+        protected override void OnFall()
+        {
+            shouldResetSprintState = false;
+
+            base.OnFall();
         }
-        #endregion
     }
 }

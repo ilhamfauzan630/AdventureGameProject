@@ -1,4 +1,3 @@
-using System;
 using UnityEngine.InputSystem;
 
 namespace AdventureGame
@@ -7,10 +6,8 @@ namespace AdventureGame
     {
         public PlayerStoppingState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
-
         }
 
-        #region IState Methods
         public override void Enter()
         {
             stateMachine.ReusableData.MovementSpeedModifier = 0f;
@@ -18,6 +15,15 @@ namespace AdventureGame
             SetBaseCameraRecenteringData();
 
             base.Enter();
+
+            StartAnimation(stateMachine.Player.AnimationData.StoppingParameterHash);
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+
+            StopAnimation(stateMachine.Player.AnimationData.StoppingParameterHash);
         }
 
         public override void PhysicsUpdate()
@@ -38,29 +44,24 @@ namespace AdventureGame
         {
             stateMachine.ChangeState(stateMachine.IdlingState);
         }
-        #endregion
 
-        #region Reusable Methods
-        protected override void AddInputActionsCallback()
+        protected override void AddInputActionsCallbacks()
         {
-            base.AddInputActionsCallback();
+            base.AddInputActionsCallbacks();
 
             stateMachine.Player.Input.PlayerActions.Movement.started += OnMovementStarted;
         }
 
-        protected override void RemoveInputActionsCallback()
+        protected override void RemoveInputActionsCallbacks()
         {
-            base.RemoveInputActionsCallback();
+            base.RemoveInputActionsCallbacks();
 
             stateMachine.Player.Input.PlayerActions.Movement.started -= OnMovementStarted;
         }
-        #endregion
-        #region Input Methods
 
         private void OnMovementStarted(InputAction.CallbackContext context)
         {
             OnMove();
         }
-        #endregion
     }
 }

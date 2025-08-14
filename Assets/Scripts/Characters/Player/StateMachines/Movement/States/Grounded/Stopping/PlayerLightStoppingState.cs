@@ -6,16 +6,13 @@ namespace AdventureGame
         {
         }
 
-        #region IState Methods
         public override void Enter()
         {
             base.Enter();
 
-            stateMachine.ReusableData.MovementDecelerationForce = movementData.StopData.LightDecelerationForce;
+            stateMachine.ReusableData.MovementDecelerationForce = groundedData.StopData.LightDecelerationForce;
 
             stateMachine.ReusableData.CurrentJumpForce = airborneData.JumpData.WeakForce;
         }
-
-        #endregion
     }
 }

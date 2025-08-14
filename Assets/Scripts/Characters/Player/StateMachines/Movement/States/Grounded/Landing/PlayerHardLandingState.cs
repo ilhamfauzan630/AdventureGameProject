@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace AdventureGame
@@ -12,12 +8,13 @@ namespace AdventureGame
         {
         }
 
-        #region IState Methods
         public override void Enter()
         {
             stateMachine.ReusableData.MovementSpeedModifier = 0f;
 
             base.Enter();
+
+            StartAnimation(stateMachine.Player.AnimationData.HardLandParameterHash);
 
             stateMachine.Player.Input.PlayerActions.Movement.Disable();
 
@@ -27,6 +24,8 @@ namespace AdventureGame
         public override void Exit()
         {
             base.Exit();
+
+            StopAnimation(stateMachine.Player.AnimationData.HardLandParameterHash);
 
             stateMachine.Player.Input.PlayerActions.Movement.Enable();
         }
@@ -48,29 +47,28 @@ namespace AdventureGame
             stateMachine.Player.Input.PlayerActions.Movement.Enable();
         }
 
-
         public override void OnAnimationTransitionEvent()
         {
             stateMachine.ChangeState(stateMachine.IdlingState);
         }
 
-        #endregion
-
-        #region Reusable Methods
-
-        protected override void AddInputActionsCallback()
+        protected override void AddInputActionsCallbacks()
         {
-            base.AddInputActionsCallback();
+            base.AddInputActionsCallbacks();
 
             stateMachine.Player.Input.PlayerActions.Movement.started += OnMovementStarted;
         }
 
-
-        protected override void RemoveInputActionsCallback()
+        protected override void RemoveInputActionsCallbacks()
         {
-            base.RemoveInputActionsCallback();
+            base.RemoveInputActionsCallbacks();
 
             stateMachine.Player.Input.PlayerActions.Movement.started -= OnMovementStarted;
+        }
+
+        private void OnMovementStarted(InputAction.CallbackContext context)
+        {
+            OnMove();
         }
 
         protected override void OnMove()
@@ -82,17 +80,9 @@ namespace AdventureGame
 
             stateMachine.ChangeState(stateMachine.RunningState);
         }
-        #endregion
 
-        #region Input Methods
         protected override void OnJumpStarted(InputAction.CallbackContext context)
         {
         }
-        private void OnMovementStarted(InputAction.CallbackContext context)
-        {
-            OnMove();
-        }
-
-        #endregion
     }
 }

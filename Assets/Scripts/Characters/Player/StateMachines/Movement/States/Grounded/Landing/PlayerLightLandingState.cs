@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace AdventureGame
@@ -10,10 +8,9 @@ namespace AdventureGame
         {
         }
 
-        #region IState Methods
         public override void Enter()
         {
-            stateMachine.ReusableData.MovementSpeedModifier = 0f;
+            stateMachine.ReusableData.MovementSpeedModifier = 0;
 
             base.Enter();
 
@@ -48,11 +45,7 @@ namespace AdventureGame
 
         public override void OnAnimationTransitionEvent()
         {
-            base.OnAnimationTransitionEvent();
-
             stateMachine.ChangeState(stateMachine.IdlingState);
         }
-
-        #endregion
     }
 }

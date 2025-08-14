@@ -6,19 +6,24 @@ namespace AdventureGame
         {
         }
 
-        #region IState Methods
-
         public override void Enter()
         {
             base.Enter();
 
-            stateMachine.ReusableData.MovementDecelerationForce = movementData.StopData.HardDecelerationForce;
+            StartAnimation(stateMachine.Player.AnimationData.HardStopParameterHash);
+
+            stateMachine.ReusableData.MovementDecelerationForce = groundedData.StopData.HardDecelerationForce;
 
             stateMachine.ReusableData.CurrentJumpForce = airborneData.JumpData.StrongForce;
         }
-        #endregion
 
-        #region Reusable Method
+        public override void Exit()
+        {
+            base.Exit();
+
+            StopAnimation(stateMachine.Player.AnimationData.HardStopParameterHash);
+        }
+
         protected override void OnMove()
         {
             if (stateMachine.ReusableData.ShouldWalk)
@@ -28,7 +33,5 @@ namespace AdventureGame
 
             stateMachine.ChangeState(stateMachine.RunningState);
         }
-
-        #endregion
     }
 }

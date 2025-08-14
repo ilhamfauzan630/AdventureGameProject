@@ -1,29 +1,33 @@
-using System;
 using UnityEngine;
 
 namespace AdventureGame
 {
     public class PlayerFallingState : PlayerAirborneState
     {
-        private PlayerFallData fallData;
-
-        private Vector3 PlayerPositionOnEnter;
+        private Vector3 playerPositionOnEnter;
 
         public PlayerFallingState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
-            fallData = airborneData.FallData;
         }
 
-        #region IState Methods
         public override void Enter()
         {
             base.Enter();
 
-            PlayerPositionOnEnter = stateMachine.Player.transform.position;
+            StartAnimation(stateMachine.Player.AnimationData.FallParameterHash);
 
             stateMachine.ReusableData.MovementSpeedModifier = 0f;
 
+            playerPositionOnEnter = stateMachine.Player.transform.position;
+
             ResetVerticalVelocity();
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+
+            StopAnimation(stateMachine.Player.AnimationData.FallParameterHash);
         }
 
         public override void PhysicsUpdate()
@@ -33,25 +37,36 @@ namespace AdventureGame
             LimitVerticalVelocity();
         }
 
+        private void LimitVerticalVelocity()
+        {
+            Vector3 playerVerticalVelocity = GetPlayerVerticalVelocity();
 
-        #endregion
+            if (playerVerticalVelocity.y >= -airborneData.FallData.FallSpeedLimit)
+            {
+                return;
+            }
 
-        #region Reusable Methods
+            Vector3 limitedVelocityForce = new Vector3(0f, -airborneData.FallData.FallSpeedLimit - playerVerticalVelocity.y, 0f);
+
+            stateMachine.Player.Rigidbody.AddForce(limitedVelocityForce, ForceMode.VelocityChange);
+        }
+
         protected override void ResetSprintState()
         {
         }
+
         protected override void OnContactWithGround(Collider collider)
         {
-            float fallDistance = PlayerPositionOnEnter.y - stateMachine.Player.transform.position.y;
+            float fallDistance = playerPositionOnEnter.y - stateMachine.Player.transform.position.y;
 
-            if (fallDistance < fallData.MinimumDistanceToBeConsideredHardFall)
+            if (fallDistance < airborneData.FallData.MinimumDistanceToBeConsideredHardFall)
             {
                 stateMachine.ChangeState(stateMachine.LightLandingState);
 
                 return;
             }
 
-            if (stateMachine.ReusableData.ShouldSprint && !stateMachine.ReusableData.ShouldSprint || stateMachine.ReusableData.MovementInput == Vector2.zero)
+            if (stateMachine.ReusableData.ShouldWalk && !stateMachine.ReusableData.ShouldSprint || stateMachine.ReusableData.MovementInput == Vector2.zero)
             {
                 stateMachine.ChangeState(stateMachine.HardLandingState);
 
@@ -59,25 +74,7 @@ namespace AdventureGame
             }
 
             stateMachine.ChangeState(stateMachine.RollingState);
+
         }
-        #endregion
-
-        #region Main Methods
-        private void LimitVerticalVelocity()
-        {
-            Vector3 playerVerticalVelocity = GetPlayerVerticalVelocity();
-
-            if (playerVerticalVelocity.y >= -fallData.FallSpeedLimit)
-            {
-                return;
-            }
-
-            Vector3 limitedVelocity = new Vector3(0f, -fallData.FallSpeedLimit - playerVerticalVelocity.y, 0f);
-
-            stateMachine.Player.Rigidbody.AddForce(limitedVelocity, ForceMode.VelocityChange);
-        }
-
-        #endregion
-
     }
 }

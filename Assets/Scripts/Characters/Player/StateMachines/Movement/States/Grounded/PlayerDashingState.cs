@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,27 +5,27 @@ namespace AdventureGame
 {
     public class PlayerDashingState : PlayerGroundedState
     {
-        private PlayerDashData dashData;
         private float startTime;
-        private int ConsecutiveDashesUsed;
+
+        private int consecutiveDashesUsed;
+
         private bool shouldKeepRotating;
 
         public PlayerDashingState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
-            dashData = movementData.DashData;
         }
 
-
-        #region IState Methods
         public override void Enter()
         {
-            stateMachine.ReusableData.MovementSpeedModifier = dashData.SpeedModifier;
+            stateMachine.ReusableData.MovementSpeedModifier = groundedData.DashData.SpeedModifier;
 
             base.Enter();
 
+            StartAnimation(stateMachine.Player.AnimationData.DashParameterHash);
+
             stateMachine.ReusableData.CurrentJumpForce = airborneData.JumpData.StrongForce;
 
-            stateMachine.ReusableData.RotationData = dashData.RotationData;
+            stateMachine.ReusableData.RotationData = groundedData.DashData.RotationData;
 
             Dash();
 
@@ -40,6 +39,8 @@ namespace AdventureGame
         public override void Exit()
         {
             base.Exit();
+
+            StopAnimation(stateMachine.Player.AnimationData.DashParameterHash);
 
             SetBaseRotationData();
         }
@@ -67,9 +68,29 @@ namespace AdventureGame
 
             stateMachine.ChangeState(stateMachine.SprintingState);
         }
-        #endregion
 
-        #region Main Methods
+        protected override void AddInputActionsCallbacks()
+        {
+            base.AddInputActionsCallbacks();
+
+            stateMachine.Player.Input.PlayerActions.Movement.performed += OnMovementPerformed;
+
+        }
+
+        protected override void RemoveInputActionsCallbacks()
+        {
+            base.RemoveInputActionsCallbacks();
+
+            stateMachine.Player.Input.PlayerActions.Movement.performed -= OnMovementPerformed;
+        }
+
+        protected override void OnMovementPerformed(InputAction.CallbackContext context)
+        {
+            base.OnMovementPerformed(context);
+
+            shouldKeepRotating = true;
+        }
+
         private void Dash()
         {
             Vector3 dashDirection = stateMachine.Player.transform.forward;
@@ -85,56 +106,33 @@ namespace AdventureGame
                 dashDirection = GetTargetRotationDirection(stateMachine.ReusableData.CurrentTargetRotation.y);
             }
 
-            stateMachine.Player.Rigidbody.velocity = dashDirection * getMovementSpeed(false);
+            stateMachine.Player.Rigidbody.velocity = dashDirection * GetMovementSpeed(false);
         }
 
         private void UpdateConsecutiveDashes()
         {
-            if (IsConsecutive())
+            if (!IsConsecutive())
             {
-                ConsecutiveDashesUsed = 0;
+                consecutiveDashesUsed = 0;
             }
 
-            ++ConsecutiveDashesUsed;
+            ++consecutiveDashesUsed;
 
-            if (ConsecutiveDashesUsed == dashData.ConsecutiveDashedLimitAmound)
+            if (consecutiveDashesUsed == groundedData.DashData.ConsecutiveDashesLimitAmount)
             {
-                ConsecutiveDashesUsed = 0;
+                consecutiveDashesUsed = 0;
 
-                stateMachine.Player.Input.DisableActionFor(stateMachine.Player.Input.PlayerActions.Dash, dashData.DashLimitReachedCooldown);
+                stateMachine.Player.Input.DisableActionFor(stateMachine.Player.Input.PlayerActions.Dash, groundedData.DashData.DashLimitReachedCooldown);
             }
         }
 
         private bool IsConsecutive()
         {
-            return Time.time < startTime + dashData.TimeToBeConsideredConsecutive;
-        }
-        #endregion
-
-        #region Reusable Methods
-        protected override void AddInputActionsCallback()
-        {
-            base.AddInputActionsCallback();
-
-            stateMachine.Player.Input.PlayerActions.Movement.performed += OnMovementPerformed;
+            return Time.time < startTime + groundedData.DashData.TimeToBeConsideredConsecutive;
         }
 
-        protected override void RemoveInputActionsCallback()
-        {
-            base.RemoveInputActionsCallback();
-
-            stateMachine.Player.Input.PlayerActions.Movement.performed -= OnMovementPerformed;
-        }
-        #endregion
-
-        #region Input Methods
-        private void OnMovementPerformed(InputAction.CallbackContext context)
-        {
-            shouldKeepRotating = true;
-        }
         protected override void OnDashStarted(InputAction.CallbackContext context)
         {
         }
-        #endregion
     }
 }

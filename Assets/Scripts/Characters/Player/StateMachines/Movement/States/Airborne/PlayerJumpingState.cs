@@ -5,22 +5,22 @@ namespace AdventureGame
 {
     public class PlayerJumpingState : PlayerAirborneState
     {
-        private PlayerJumpData jumpData;
         private bool shouldKeepRotating;
         private bool canStartFalling;
+
         public PlayerJumpingState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
-            jumpData = airborneData.JumpData;
-
-            stateMachine.ReusableData.RotationData = jumpData.RotationData;
         }
 
-        #region IState Methods
         public override void Enter()
         {
             base.Enter();
 
             stateMachine.ReusableData.MovementSpeedModifier = 0f;
+
+            stateMachine.ReusableData.MovementDecelerationForce = airborneData.JumpData.DecelerationForce;
+
+            stateMachine.ReusableData.RotationData = airborneData.JumpData.RotationData;
 
             shouldKeepRotating = stateMachine.ReusableData.MovementInput != Vector2.zero;
 
@@ -30,8 +30,6 @@ namespace AdventureGame
         public override void Exit()
         {
             base.Exit();
-
-            stateMachine.ReusableData.MovementDecelerationForce = jumpData.DecelerationForce;
 
             SetBaseRotationData();
 
@@ -47,7 +45,7 @@ namespace AdventureGame
                 canStartFalling = true;
             }
 
-            if (!canStartFalling || GetPlayerVerticalVelocity().y > 0)
+            if (!canStartFalling || IsMovingUp(0f))
             {
                 return;
             }
@@ -70,67 +68,64 @@ namespace AdventureGame
             }
         }
 
-        #endregion
-
-        #region Reusable Methods
-        protected override void ResetSprintState()
-        {
-            base.ResetSprintState();
-        }
-        #endregion
-
-        #region Main Methods
         private void Jump()
         {
             Vector3 jumpForce = stateMachine.ReusableData.CurrentJumpForce;
 
-            Vector3 JumpDirection = stateMachine.Player.transform.forward;
+            Vector3 jumpDirection = stateMachine.Player.transform.forward;
 
             if (shouldKeepRotating)
             {
                 UpdateTargetRotation(GetMovementInputDirection());
-                
-                JumpDirection = GetTargetRotationDirection(stateMachine.ReusableData.CurrentTargetRotation.y);
+
+                jumpDirection = GetTargetRotationDirection(stateMachine.ReusableData.CurrentTargetRotation.y);
             }
 
-            jumpForce.x *= JumpDirection.x;
-            jumpForce.z *= JumpDirection.z;
+            jumpForce.x *= jumpDirection.x;
+            jumpForce.z *= jumpDirection.z;
 
-            Vector3 capsuleColliderCenterInWorldSpace = stateMachine.Player.ColliderUtility.CapsuleColliderData.Collider.bounds.center;
-
-            Ray downwardsRayFromCapsuleCenter = new Ray(capsuleColliderCenterInWorldSpace, Vector3.down);
-
-            if (Physics.Raycast(downwardsRayFromCapsuleCenter, out RaycastHit hit, jumpData.JumpToGroundRayDistance, stateMachine.Player.LayerData.GroundLayer, QueryTriggerInteraction.Ignore))
-            {
-                float groundAngle = Vector3.Angle(hit.normal, -downwardsRayFromCapsuleCenter.direction);
-
-                if (IsMovingUp())
-                {
-                    float forceModifier = jumpData.JumpForceModifierOnSlopeUpwards.Evaluate(groundAngle);
-
-                    jumpForce.x *= forceModifier;
-                    jumpForce.x *= forceModifier;
-                }
-
-                if (IsMovingDown())
-                {
-                    float forceModifier = jumpData.JumpForceModifierOnSlopeDownWards.Evaluate(groundAngle);
-
-                    jumpForce.y *= forceModifier;
-                }
-            }
+            jumpForce = GetJumpForceOnSlope(jumpForce);
 
             ResetVelocity();
 
             stateMachine.Player.Rigidbody.AddForce(jumpForce, ForceMode.VelocityChange);
         }
 
-        #endregion
+        private Vector3 GetJumpForceOnSlope(Vector3 jumpForce)
+        {
+            Vector3 capsuleColliderCenterInWorldSpace = stateMachine.Player.ResizableCapsuleCollider.CapsuleColliderData.Collider.bounds.center;
 
-        #region Input Methods
+            Ray downwardsRayFromCapsuleCenter = new Ray(capsuleColliderCenterInWorldSpace, Vector3.down);
+
+            if (Physics.Raycast(downwardsRayFromCapsuleCenter, out RaycastHit hit, airborneData.JumpData.JumpToGroundRayDistance, stateMachine.Player.LayerData.GroundLayer, QueryTriggerInteraction.Ignore))
+            {
+                float groundAngle = Vector3.Angle(hit.normal, -downwardsRayFromCapsuleCenter.direction);
+
+                if (IsMovingUp())
+                {
+                    float forceModifier = airborneData.JumpData.JumpForceModifierOnSlopeUpwards.Evaluate(groundAngle);
+
+                    jumpForce.x *= forceModifier;
+                    jumpForce.z *= forceModifier;
+                }
+
+                if (IsMovingDown())
+                {
+                    float forceModifier = airborneData.JumpData.JumpForceModifierOnSlopeDownwards.Evaluate(groundAngle);
+
+                    jumpForce.y *= forceModifier;
+                }
+            }
+
+            return jumpForce;
+        }
+
+        protected override void ResetSprintState()
+        {
+        }
+
         protected override void OnMovementCanceled(InputAction.CallbackContext context)
         {
         }
-        #endregion
     }
 }

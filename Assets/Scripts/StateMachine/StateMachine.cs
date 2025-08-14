@@ -30,6 +30,16 @@ namespace AdventureGame
             currentState?.PhysicsUpdate();
         }
 
+        public void OnTriggerEnter(Collider collider)
+        {
+            currentState?.OnTriggerEnter(collider);
+        }
+
+        public void OnTriggerExit(Collider collider)
+        {
+            currentState?.OnTriggerExit(collider);
+        }
+
         public void OnAnimationEnterEvent()
         {
             currentState?.OnAnimationEnterEvent();
@@ -43,16 +53,6 @@ namespace AdventureGame
         public void OnAnimationTransitionEvent()
         {
             currentState?.OnAnimationTransitionEvent();
-        }
-
-        public void OnTriggerEnter(Collider collider)
-        {
-            currentState?.OnTriggerEnter(collider);
-        }
-
-        public void OnTriggerExit(Collider collider)
-        {
-            currentState?.OnTriggerExit(collider);
         }
     }
 }

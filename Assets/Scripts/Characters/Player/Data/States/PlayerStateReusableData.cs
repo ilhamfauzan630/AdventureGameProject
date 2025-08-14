@@ -1,4 +1,3 @@
-
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,9 +6,10 @@ namespace AdventureGame
     public class PlayerStateReusableData
     {
         public Vector2 MovementInput { get; set; }
-        public float MovementSpeedModifier { get; set; } = 1;
-        public float MovementOnSlopeSpeedModifier { get; set; } = 1;
-        public float MovementDecelerationForce { get; set; } = 1;
+
+        public float MovementSpeedModifier { get; set; } = 1f;
+        public float MovementOnSlopesSpeedModifier { get; set; } = 1f;
+        public float MovementDecelerationForce { get; set; } = 1f;
 
         public List<PlayerCameraRecenteringData> SidewaysCameraRecenteringData { get; set; }
         public List<PlayerCameraRecenteringData> BackwardsCameraRecenteringData { get; set; }
@@ -21,7 +21,6 @@ namespace AdventureGame
         private Vector3 timeToReachTargetRotation;
         private Vector3 dampedTargetRotationCurrentVelocity;
         private Vector3 dampedTargetRotationPassedTime;
-
 
         public ref Vector3 CurrentTargetRotation
         {
@@ -46,7 +45,7 @@ namespace AdventureGame
                 return ref dampedTargetRotationCurrentVelocity;
             }
         }
-        
+
         public ref Vector3 DampedTargetRotationPassedTime
         {
             get

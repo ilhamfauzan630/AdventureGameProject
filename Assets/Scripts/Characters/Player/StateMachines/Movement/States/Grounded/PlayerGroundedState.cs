@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,30 +5,35 @@ namespace AdventureGame
 {
     public class PlayerGroundedState : PlayerMovementState
     {
-        private SlopeData slopeData;
         public PlayerGroundedState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
-            slopeData = stateMachine.Player.ColliderUtility.SlopeData;
         }
 
-        #region IState Method
         public override void Enter()
         {
             base.Enter();
+
+            StartAnimation(stateMachine.Player.AnimationData.GroundedParameterHash);
 
             UpdateShouldSprintState();
 
             UpdateCameraRecenteringState(stateMachine.ReusableData.MovementInput);
         }
+
+        public override void Exit()
+        {
+            base.Exit();
+
+            StopAnimation(stateMachine.Player.AnimationData.GroundedParameterHash);
+        }
+
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
 
             Float();
         }
-        #endregion
 
-        #region Main Methods
         private void UpdateShouldSprintState()
         {
             if (!stateMachine.ReusableData.ShouldSprint)
@@ -47,29 +51,29 @@ namespace AdventureGame
 
         private void Float()
         {
-            Vector3 capsuleColliderCenterInWorldSpace = stateMachine.Player.ColliderUtility.CapsuleColliderData.Collider.bounds.center;
+            Vector3 capsuleColliderCenterInWorldSpace = stateMachine.Player.ResizableCapsuleCollider.CapsuleColliderData.Collider.bounds.center;
 
-            Ray downWardsRayFromCapsuleCenter = new Ray(capsuleColliderCenterInWorldSpace, Vector3.down);
+            Ray downwardsRayFromCapsuleCenter = new Ray(capsuleColliderCenterInWorldSpace, Vector3.down);
 
-            if (Physics.Raycast(downWardsRayFromCapsuleCenter, out RaycastHit hit, slopeData.FloatRayDistance, stateMachine.Player.LayerData.GroundLayer, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(downwardsRayFromCapsuleCenter, out RaycastHit hit, stateMachine.Player.ResizableCapsuleCollider.SlopeData.FloatRayDistance, stateMachine.Player.LayerData.GroundLayer, QueryTriggerInteraction.Ignore))
             {
-                float groundAngle = Vector3.Angle(hit.normal, -downWardsRayFromCapsuleCenter.direction);
+                float groundAngle = Vector3.Angle(hit.normal, -downwardsRayFromCapsuleCenter.direction);
 
-                float slopeSpeedModifier = setSlopeSpeedModifierOnAngle(groundAngle);
+                float slopeSpeedModifier = SetSlopeSpeedModifierOnAngle(groundAngle);
 
                 if (slopeSpeedModifier == 0f)
                 {
                     return;
                 }
 
-                float distanceFloatingPoint = stateMachine.Player.ColliderUtility.CapsuleColliderData.ColliderCenterInLocalSpace.y * stateMachine.Player.transform.localScale.y - hit.distance;
+                float distanceToFloatingPoint = stateMachine.Player.ResizableCapsuleCollider.CapsuleColliderData.ColliderCenterInLocalSpace.y * stateMachine.Player.transform.localScale.y - hit.distance;
 
-                if (distanceFloatingPoint == 0f)
+                if (distanceToFloatingPoint == 0f)
                 {
                     return;
                 }
 
-                float amountToLift = distanceFloatingPoint * slopeData.stepReachForce - GetPlayerVerticalVelocity().y;
+                float amountToLift = distanceToFloatingPoint * stateMachine.Player.ResizableCapsuleCollider.SlopeData.StepReachForce - GetPlayerVerticalVelocity().y;
 
                 Vector3 liftForce = new Vector3(0f, amountToLift, 0f);
 
@@ -77,13 +81,13 @@ namespace AdventureGame
             }
         }
 
-        private float setSlopeSpeedModifierOnAngle(float angle)
+        private float SetSlopeSpeedModifierOnAngle(float angle)
         {
-            float slopeSpeedModifier = movementData.SlopeSpeedAngles.Evaluate(angle);
+            float slopeSpeedModifier = groundedData.SlopeSpeedAngles.Evaluate(angle);
 
-            if (stateMachine.ReusableData.MovementOnSlopeSpeedModifier != slopeSpeedModifier)
+            if (stateMachine.ReusableData.MovementOnSlopesSpeedModifier != slopeSpeedModifier)
             {
-                stateMachine.ReusableData.MovementOnSlopeSpeedModifier = slopeSpeedModifier;
+                stateMachine.ReusableData.MovementOnSlopesSpeedModifier = slopeSpeedModifier;
 
                 UpdateCameraRecenteringState(stateMachine.ReusableData.MovementInput);
             }
@@ -91,18 +95,34 @@ namespace AdventureGame
             return slopeSpeedModifier;
         }
 
-        private bool IsThereGroundUnderneath()
+        protected override void AddInputActionsCallbacks()
         {
-            BoxCollider groundCheckCollider = stateMachine.Player.ColliderUtility.TriggerColliderData.GroundCheckCollider;
-            Vector3 groundColliderCenterInWorldSpace = groundCheckCollider.bounds.center;
+            base.AddInputActionsCallbacks();
 
-            Collider[] overlappedGroundColliders = Physics.OverlapBox(groundColliderCenterInWorldSpace, stateMachine.Player.ColliderUtility.TriggerColliderData.GroundCheckColliderExtends, groundCheckCollider.transform.rotation, stateMachine.Player.LayerData.GroundLayer, QueryTriggerInteraction.Ignore);
+            stateMachine.Player.Input.PlayerActions.Dash.started += OnDashStarted;
 
-            return overlappedGroundColliders.Length > 0;
+            stateMachine.Player.Input.PlayerActions.Jump.started += OnJumpStarted;
         }
-        #endregion
 
-        #region Reusable Methods
+        protected override void RemoveInputActionsCallbacks()
+        {
+            base.RemoveInputActionsCallbacks();
+
+            stateMachine.Player.Input.PlayerActions.Dash.started -= OnDashStarted;
+
+            stateMachine.Player.Input.PlayerActions.Jump.started -= OnJumpStarted;
+        }
+
+        protected virtual void OnDashStarted(InputAction.CallbackContext context)
+        {
+            stateMachine.ChangeState(stateMachine.DashingState);
+        }
+
+        protected virtual void OnJumpStarted(InputAction.CallbackContext context)
+        {
+            stateMachine.ChangeState(stateMachine.JumpingState);
+        }
+
         protected virtual void OnMove()
         {
             if (stateMachine.ReusableData.ShouldSprint)
@@ -111,6 +131,7 @@ namespace AdventureGame
 
                 return;
             }
+
             if (stateMachine.ReusableData.ShouldWalk)
             {
                 stateMachine.ChangeState(stateMachine.WalkingState);
@@ -121,58 +142,44 @@ namespace AdventureGame
             stateMachine.ChangeState(stateMachine.RunningState);
         }
 
-        protected override void AddInputActionsCallback()
-        {
-            base.AddInputActionsCallback();
-
-            stateMachine.Player.Input.PlayerActions.Dash.started += OnDashStarted;
-
-            stateMachine.Player.Input.PlayerActions.Jump.started += OnJumpStarted;
-        }
-
-        protected override void RemoveInputActionsCallback()
-        {
-            base.RemoveInputActionsCallback();
-
-            stateMachine.Player.Input.PlayerActions.Dash.started -= OnDashStarted;
-
-            stateMachine.Player.Input.PlayerActions.Jump.started -= OnJumpStarted;
-        }
-
         protected override void OnContactWithGroundExited(Collider collider)
         {
             if (IsThereGroundUnderneath())
             {
                 return;
-            } 
+            }
 
-            Vector3 capsuleColliderCenterInWorldSpace = stateMachine.Player.ColliderUtility.CapsuleColliderData.Collider.bounds.center;
+            Vector3 capsuleColliderCenterInWorldSpace = stateMachine.Player.ResizableCapsuleCollider.CapsuleColliderData.Collider.bounds.center;
 
-            Ray downwardsRayFromCapsuleBottom = new Ray(capsuleColliderCenterInWorldSpace - stateMachine.Player.ColliderUtility.CapsuleColliderData.ColliderVerticalExtents, Vector3.down);
+            Ray downwardsRayFromCapsuleBottom = new Ray(capsuleColliderCenterInWorldSpace - stateMachine.Player.ResizableCapsuleCollider.CapsuleColliderData.ColliderVerticalExtents, Vector3.down);
 
-            if (!Physics.Raycast(downwardsRayFromCapsuleBottom, out _, movementData.GroundToFallRayDistance, stateMachine.Player.LayerData.GroundLayer, QueryTriggerInteraction.Ignore))
+            if (!Physics.Raycast(downwardsRayFromCapsuleBottom, out _, groundedData.GroundToFallRayDistance, stateMachine.Player.LayerData.GroundLayer, QueryTriggerInteraction.Ignore))
             {
                 OnFall();
             }
+        }
+
+        private bool IsThereGroundUnderneath()
+        {
+            PlayerTriggerColliderData triggerColliderData = stateMachine.Player.ResizableCapsuleCollider.TriggerColliderData;
+
+            Vector3 groundColliderCenterInWorldSpace = triggerColliderData.GroundCheckCollider.bounds.center;
+
+            Collider[] overlappedGroundColliders = Physics.OverlapBox(groundColliderCenterInWorldSpace, triggerColliderData.GroundCheckColliderVerticalExtents, triggerColliderData.GroundCheckCollider.transform.rotation, stateMachine.Player.LayerData.GroundLayer, QueryTriggerInteraction.Ignore);
+
+            return overlappedGroundColliders.Length > 0;
         }
 
         protected virtual void OnFall()
         {
             stateMachine.ChangeState(stateMachine.FallingState);
         }
-        #endregion
 
-        #region Input Methods
+        protected override void OnMovementPerformed(InputAction.CallbackContext context)
+        {
+            base.OnMovementPerformed(context);
 
-        protected virtual void OnDashStarted(InputAction.CallbackContext context)
-        {
-            stateMachine.ChangeState(stateMachine.DashingState);
+            UpdateTargetRotation(GetMovementInputDirection());
         }
-        
-        protected virtual void OnJumpStarted(InputAction.CallbackContext context)
-        {
-            stateMachine.ChangeState(stateMachine.JumpingState);
-        }
-        #endregion
     }
 }

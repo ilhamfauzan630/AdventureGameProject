@@ -16,6 +16,7 @@ namespace AdventureGame
             }
 
             Collider = gameObject.GetComponent<CapsuleCollider>();
+
             UpdateColliderData();
         }
 

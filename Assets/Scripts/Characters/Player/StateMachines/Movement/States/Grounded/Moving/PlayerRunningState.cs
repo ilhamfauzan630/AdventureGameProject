@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,25 +5,42 @@ namespace AdventureGame
 {
     public class PlayerRunningState : PlayerMovingState
     {
-        private PlayerSprintData sprintData;
         private float startTime;
+
         public PlayerRunningState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
-            sprintData = movementData.SprintData;
         }
 
-        #region IState Methods
         public override void Enter()
         {
-            stateMachine.ReusableData.MovementSpeedModifier = movementData.RunData.SpeedModifier;
+            stateMachine.ReusableData.MovementSpeedModifier = groundedData.RunData.SpeedModifier;
 
             base.Enter();
+
+            StartAnimation(stateMachine.Player.AnimationData.RunParameterHash);
 
             stateMachine.ReusableData.CurrentJumpForce = airborneData.JumpData.MediumForce;
 
             startTime = Time.time;
+        }
 
-            if (Time.time < startTime + sprintData.RunToWalkTime)
+        public override void Exit()
+        {
+            base.Exit();
+
+            StopAnimation(stateMachine.Player.AnimationData.RunParameterHash);
+        }
+
+        public override void Update()
+        {
+            base.Update();
+
+            if (!stateMachine.ReusableData.ShouldWalk)
+            {
+                return;
+            }
+
+            if (Time.time < startTime + groundedData.SprintData.RunToWalkTime)
             {
                 return;
             }
@@ -32,7 +48,6 @@ namespace AdventureGame
             StopRunning();
         }
 
-        #region Maint Methods
         private void StopRunning()
         {
             if (stateMachine.ReusableData.MovementInput == Vector2.zero)
@@ -44,34 +59,19 @@ namespace AdventureGame
 
             stateMachine.ChangeState(stateMachine.WalkingState);
         }
-        #endregion
 
-        public override void Update()
+        protected override void OnWalkToggleStarted(InputAction.CallbackContext context)
         {
-            base.Update();
+            base.OnWalkToggleStarted(context);
 
-            if (!stateMachine.ReusableData.ShouldWalk)
-            {
-                return;
-            }
+            stateMachine.ChangeState(stateMachine.WalkingState);
         }
 
-        #endregion
-
-        #region Input Methods
         protected override void OnMovementCanceled(InputAction.CallbackContext context)
         {
             stateMachine.ChangeState(stateMachine.MediumStoppingState);
 
             base.OnMovementCanceled(context);
         }
-        protected override void OnwalkToggleStarted(InputAction.CallbackContext context)
-        {
-            base.OnwalkToggleStarted(context);
-
-            stateMachine.ChangeState(stateMachine.WalkingState);
-        }
-    
-        #endregion
     }
 }

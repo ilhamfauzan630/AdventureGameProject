@@ -5,20 +5,26 @@ namespace AdventureGame
 {
     public class PlayerRollingState : PlayerLandingState
     {
-        private PlayerRollData rollData;
         public PlayerRollingState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
-            rollData = movementData.RollData;
         }
 
-        #region IState Methods
         public override void Enter()
         {
-            stateMachine.ReusableData.MovementSpeedModifier = rollData.SpeedModifier;
+            stateMachine.ReusableData.MovementSpeedModifier = groundedData.RollData.SpeedModifier;
 
             base.Enter();
 
+            StartAnimation(stateMachine.Player.AnimationData.RollParameterHash);
+
             stateMachine.ReusableData.ShouldSprint = false;
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+
+            StopAnimation(stateMachine.Player.AnimationData.RollParameterHash);
         }
 
         public override void PhysicsUpdate()
@@ -29,6 +35,7 @@ namespace AdventureGame
             {
                 return;
             }
+
             RotateTowardsTargetRotation();
         }
 
@@ -43,13 +50,9 @@ namespace AdventureGame
 
             OnMove();
         }
-        #endregion
 
-        #region Input Methods
         protected override void OnJumpStarted(InputAction.CallbackContext context)
         {
-            base.OnJumpStarted(context);
         }
-        #endregion
     }
 }

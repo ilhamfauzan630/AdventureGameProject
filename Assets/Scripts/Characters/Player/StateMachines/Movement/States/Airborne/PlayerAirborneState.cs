@@ -8,25 +8,30 @@ namespace AdventureGame
         {
         }
 
-        #region IState Methods
         public override void Enter()
         {
             base.Enter();
 
+            StartAnimation(stateMachine.Player.AnimationData.AirborneParameterHash);
+
             ResetSprintState();
         }
-        #endregion
 
-        #region Reusable Methods
-        protected override void OnContactWithGround(Collider collider)
+        public override void Exit()
         {
-            stateMachine.ChangeState(stateMachine.LightLandingState);
+            base.Exit();
+
+            StopAnimation(stateMachine.Player.AnimationData.AirborneParameterHash);
         }
 
         protected virtual void ResetSprintState()
         {
             stateMachine.ReusableData.ShouldSprint = false;
         }
-        #endregion
+
+        protected override void OnContactWithGround(Collider collider)
+        {
+            stateMachine.ChangeState(stateMachine.LightLandingState);
+        }
     }
 }

@@ -8,11 +8,11 @@ namespace AdventureGame
     {
         [field: SerializeField] public BoxCollider GroundCheckCollider { get; private set; }
 
-        public Vector3 GroundCheckColliderExtends { get; private set; }
+        public Vector3 GroundCheckColliderVerticalExtents { get; private set; }
 
         public void Initialize()
         {
-            GroundCheckColliderExtends = GroundCheckCollider.bounds.extents;
+            GroundCheckColliderVerticalExtents = GroundCheckCollider.bounds.extents;
         }
     }
 }
