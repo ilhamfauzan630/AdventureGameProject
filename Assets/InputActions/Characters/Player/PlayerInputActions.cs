@@ -100,6 +100,15 @@ namespace AdventureGame
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""4f14ed4c-40e4-496d-87fa-2d031ef94a80"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -256,6 +265,17 @@ namespace AdventureGame
                     ""action"": ""CursorToggle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3eb6013b-150e-4888-99d3-cc50ea873481"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -272,6 +292,7 @@ namespace AdventureGame
             m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
             m_Player_CursorToggle = m_Player.FindAction("CursorToggle", throwIfNotFound: true);
+            m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -341,6 +362,7 @@ namespace AdventureGame
         private readonly InputAction m_Player_Sprint;
         private readonly InputAction m_Player_Jump;
         private readonly InputAction m_Player_CursorToggle;
+        private readonly InputAction m_Player_Interact;
         public struct PlayerActions
         {
             private @PlayerInputActions m_Wrapper;
@@ -353,6 +375,7 @@ namespace AdventureGame
             public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
             public InputAction @CursorToggle => m_Wrapper.m_Player_CursorToggle;
+            public InputAction @Interact => m_Wrapper.m_Player_Interact;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -386,6 +409,9 @@ namespace AdventureGame
                 @CursorToggle.started += instance.OnCursorToggle;
                 @CursorToggle.performed += instance.OnCursorToggle;
                 @CursorToggle.canceled += instance.OnCursorToggle;
+                @Interact.started += instance.OnInteract;
+                @Interact.performed += instance.OnInteract;
+                @Interact.canceled += instance.OnInteract;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -414,6 +440,9 @@ namespace AdventureGame
                 @CursorToggle.started -= instance.OnCursorToggle;
                 @CursorToggle.performed -= instance.OnCursorToggle;
                 @CursorToggle.canceled -= instance.OnCursorToggle;
+                @Interact.started -= instance.OnInteract;
+                @Interact.performed -= instance.OnInteract;
+                @Interact.canceled -= instance.OnInteract;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -441,6 +470,7 @@ namespace AdventureGame
             void OnSprint(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
             void OnCursorToggle(InputAction.CallbackContext context);
+            void OnInteract(InputAction.CallbackContext context);
         }
     }
 }
