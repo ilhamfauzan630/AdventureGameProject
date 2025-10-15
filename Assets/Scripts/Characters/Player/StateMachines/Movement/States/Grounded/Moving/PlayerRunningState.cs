@@ -73,5 +73,23 @@ namespace AdventureGame
 
             base.OnMovementCanceled(context);
         }
+
+        protected override void AddInputActionsCallbacks()
+        {
+            base.AddInputActionsCallbacks();
+            
+            stateMachine.Player.Input.PlayerActions.AttackMode.started += OnAttackMode;
+        }
+
+        protected override void RemoveInputActionsCallbacks()
+        {
+            base.RemoveInputActionsCallbacks();
+            stateMachine.Player.Input.PlayerActions.AttackMode.started -= OnAttackMode;
+        }
+
+        private void OnAttackMode(InputAction.CallbackContext context)
+        {
+            stateMachine.ChangeState(stateMachine.AttackState);
+        }
     }
 }

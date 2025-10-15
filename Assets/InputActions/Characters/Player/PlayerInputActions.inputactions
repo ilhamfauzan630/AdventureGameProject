@@ -18,7 +18,7 @@
                     "name": "WalkToggle",
                     "type": "Button",
                     "id": "59e112e7-6b2f-4a71-ab28-33fbecdb017e",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -45,7 +45,7 @@
                     "name": "Dash",
                     "type": "Button",
                     "id": "3a08fe1b-9bf9-4d09-b4c2-6df4d4fa3fff",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -54,7 +54,7 @@
                     "name": "Sprint",
                     "type": "Button",
                     "id": "83217935-c13c-40c6-84f8-f8965a93ea16",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "Hold(duration=1)",
                     "initialStateCheck": false
@@ -72,7 +72,7 @@
                     "name": "CursorToggle",
                     "type": "Button",
                     "id": "e2ac7a91-4e51-40b5-bfe4-735e5216687f",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -81,7 +81,25 @@
                     "name": "Interact",
                     "type": "Button",
                     "id": "4f14ed4c-40e4-496d-87fa-2d031ef94a80",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "AttackMode",
+                    "type": "Button",
+                    "id": "8065c4d4-503b-4449-8131-6adba1ee8d5a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Fire",
+                    "type": "Button",
+                    "id": "c3c05189-cbb7-43e5-8c5e-c3ff9c31d28e",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -250,6 +268,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0b60628a-5825-4710-8252-6b000c018f72",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AttackMode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "22f2bead-9b0c-4d1d-9849-294158872d61",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Fire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -23,6 +23,9 @@ namespace AdventureGame
         public PlayerJumpingState JumpingState { get; }
         public PlayerFallingState FallingState { get; }
 
+        public PlayerAttackState AttackState { get; }
+        public PlayerArrowState ArrowState { get; }
+        
         public PlayerMovementStateMachine(Player player)
         {
             Player = player;
@@ -45,6 +48,9 @@ namespace AdventureGame
 
             JumpingState = new PlayerJumpingState(this);
             FallingState = new PlayerFallingState(this);
+
+            AttackState = new PlayerAttackState(this);
+            ArrowState = new PlayerArrowState(this);
         }
     }
 }

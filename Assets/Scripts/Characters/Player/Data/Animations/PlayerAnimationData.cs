@@ -12,6 +12,7 @@ namespace AdventureGame
         [SerializeField] private string stoppingParameterName = "Stopping";
         [SerializeField] private string landingParameterName = "Landing";
         [SerializeField] private string airborneParameterName = "Airborne";
+        [SerializeField] private string attackingParameterName = "Attacking";
 
         [Header("Grounded Parameter Names")]
         [SerializeField] private string idleParameterName = "isIdling";
@@ -23,6 +24,7 @@ namespace AdventureGame
         [SerializeField] private string hardStopParameterName = "isHardStopping";
         [SerializeField] private string rollParameterName = "isRolling";
         [SerializeField] private string hardLandParameterName = "isHardLanding";
+        [SerializeField] private string shootParameterName = "isShooting";
 
         [Header("Airborne Parameter Names")]
         [SerializeField] private string fallParameterName = "isFalling";
@@ -32,6 +34,7 @@ namespace AdventureGame
         public int StoppingParameterHash { get; private set; }
         public int LandingParameterHash { get; private set; }
         public int AirborneParameterHash { get; private set; }
+        public int AttackingParameterHash { get; private set; }
 
         public int IdleParameterHash { get; private set; }
         public int DashParameterHash { get; private set; }
@@ -42,6 +45,7 @@ namespace AdventureGame
         public int HardStopParameterHash { get; private set; }
         public int RollParameterHash { get; private set; }
         public int HardLandParameterHash { get; private set; }
+        public int ShootParameterHash { get; private set; }
 
         public int FallParameterHash { get; private set; }
 
@@ -52,6 +56,7 @@ namespace AdventureGame
             StoppingParameterHash = Animator.StringToHash(stoppingParameterName);
             LandingParameterHash = Animator.StringToHash(landingParameterName);
             AirborneParameterHash = Animator.StringToHash(airborneParameterName);
+            AttackingParameterHash = Animator.StringToHash(attackingParameterName);
 
             IdleParameterHash = Animator.StringToHash(idleParameterName);
             DashParameterHash = Animator.StringToHash(dashParameterName);
@@ -62,6 +67,7 @@ namespace AdventureGame
             HardStopParameterHash = Animator.StringToHash(hardStopParameterName);
             RollParameterHash = Animator.StringToHash(rollParameterName);
             HardLandParameterHash = Animator.StringToHash(hardLandParameterName);
+            ShootParameterHash = Animator.StringToHash(shootParameterName);
 
             FallParameterHash = Animator.StringToHash(fallParameterName);
         }

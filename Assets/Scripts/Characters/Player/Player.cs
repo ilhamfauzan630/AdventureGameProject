@@ -18,6 +18,9 @@ namespace AdventureGame
         [field: Header("Animations")]
         [field: SerializeField] public PlayerAnimationData AnimationData { get; private set; }
 
+        [field: Header("Bow")]
+        [field: SerializeField] public PlayerBow Bow { get; private set; }
+
         public Rigidbody Rigidbody { get; private set; }
         public Animator Animator { get; private set; }
 
@@ -84,6 +87,16 @@ namespace AdventureGame
         public void OnMovementStateAnimationTransitionEvent()
         {
             movementStateMachine.OnAnimationTransitionEvent();
+        }
+
+        public void OnShootArrowEvent()
+        {
+            Debug.Log($"[OnShootArrowEvent] CurrentState = {movementStateMachine.CurrentState?.GetType().Name}");
+
+            if (movementStateMachine.CurrentState is PlayerArrowState arrowState)
+            {
+                arrowState.OnShootArrowEvent();
+            }
         }
     }
 }
