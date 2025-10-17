@@ -5,6 +5,9 @@ namespace AdventureGame
 {
     public class PlayerAttackState : PlayerGroundedState
     {
+        private float attackTimer;
+        private readonly float maxAttackDuration = 2f; // ⏱️ Waktu maksimum dalam Attack State
+
         public PlayerAttackState(PlayerMovementStateMachine stateMachine) : base(stateMachine) { }
 
         public override void Enter()
@@ -14,8 +17,25 @@ namespace AdventureGame
 
             StartAnimation(stateMachine.Player.AnimationData.AttackingParameterHash);
 
-            // Kurangi kecepatan saat mode attack
-            stateMachine.ReusableData.MovementSpeedModifier = 2f;
+            stateMachine.ReusableData.MovementSpeedModifier = 3f;
+
+            // Reset timer setiap masuk Attack State
+            attackTimer = 0f;
+        }
+
+        public override void Update()
+        {
+            base.Update();
+
+            // Jalanin timer
+            attackTimer += Time.deltaTime;
+
+            // Jika waktu Attack State habis, otomatis balik ke RunningState
+            if (attackTimer >= maxAttackDuration)
+            {
+                Debug.Log("[AttackState] Timer habis → Kembali ke RunningState");
+                stateMachine.ChangeState(stateMachine.RunningState);
+            }
         }
 
         public override void Exit()

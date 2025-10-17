@@ -8,6 +8,9 @@ namespace AdventureGame
         public float speed = 30f;
         public float rotateSpeed = 10f;
 
+        [Header("Efek Ledakan")]
+        public GameObject explosionPrefab; 
+
         private Rigidbody rb;
 
         private void Awake()
@@ -42,14 +45,22 @@ namespace AdventureGame
 
         private void OnTriggerEnter(Collider other)
         {
-            // Bisa juga pakai CompareTag(targetTag) jika mau
-            Debug.Log($"💥 Arrow menabrak {other.name}");
-            if (other.CompareTag("Enemy") || other.CompareTag("Target"))
+            Debug.Log("Arrow hit: " + other.name);
+
+            if (explosionPrefab != null)
             {
-                Debug.Log("Target Hit!");
-                Destroy(other.gameObject);
-                Destroy(gameObject);
+                // Tentukan posisi spawn (bisa pakai titik kontak atau transform panah)
+                Vector3 spawnPos = transform.position;
+
+                // Buat efek ledakan
+                GameObject explosion = Instantiate(explosionPrefab, spawnPos, Quaternion.identity);
+
+                // Jadikan child dari target
+                explosion.transform.SetParent(other.transform);
             }
+
+            // Hancurkan panah setelah mengenai target
+            Destroy(gameObject);
         }
     }
 }

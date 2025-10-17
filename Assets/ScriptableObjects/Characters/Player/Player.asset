@@ -89,7 +89,7 @@ MonoBehaviour:
         <WaitTime>k__BackingField: 0.25
         <RecenteringTime>k__BackingField: 0.5
     <DashData>k__BackingField:
-      <SpeedModifier>k__BackingField: 2
+      <SpeedModifier>k__BackingField: 3
       <RotationData>k__BackingField:
         <TargetRotationReachTime>k__BackingField: {x: 0, y: 0.02, z: 0}
       <TimeToBeConsideredConsecutive>k__BackingField: 1
@@ -103,7 +103,7 @@ MonoBehaviour:
         <WaitTime>k__BackingField: -1
         <RecenteringTime>k__BackingField: -1
     <RunData>k__BackingField:
-      <SpeedModifier>k__BackingField: 1
+      <SpeedModifier>k__BackingField: 2
     <SprintData>k__BackingField:
       <SpeedModifier>k__BackingField: 1.7
       <SprintToRunTime>k__BackingField: 1
