@@ -48,14 +48,11 @@ namespace AdventureGame
 
         public void TriggerOnShootArrowEvent()
         {
-            // pastikan player selalu valid
             if (player == null)
             {
                 player = GetComponentInParent<Player>();
             }
 
-            // Hindari terlalu ketat pakai IsInAnimationTransition di sini
-            // Bisa kamu hapus atau pindahkan logikanya ke state kalau perlu
             player.OnShootArrowEvent();
         }
     }
