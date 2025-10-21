@@ -153,6 +153,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifetime: 5
   damage: 10
+  speed: 10
+  trackingStrength: 2
 --- !u!114 &1595791223414591918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,7 +178,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5749892945899594867, guid: 797ee248261f4504f9071cdf2c4300d4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.59
+      value: 0.44
       objectReference: {fileID: 0}
     - target: {fileID: 5749892945899594867, guid: 797ee248261f4504f9071cdf2c4300d4, type: 3}
       propertyPath: m_LocalPosition.y
