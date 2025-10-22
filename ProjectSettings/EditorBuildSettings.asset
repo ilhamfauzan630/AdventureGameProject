@@ -12,6 +12,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu/StageSelect.unity
     guid: 19f9d4da97274dc48882aab50f5a5d76
   - enabled: 1
-    path: Assets/Scenes/World/World.unity
+    path: Assets/Scenes/World/World3-PulauPenjaga.unity
     guid: 20777644e3e1af940b051fa91e9d668b
   m_configObjects: {}

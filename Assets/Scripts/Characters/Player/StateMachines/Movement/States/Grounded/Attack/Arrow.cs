@@ -12,12 +12,19 @@ namespace AdventureGame
         [Header("Efek Ledakan")]
         public GameObject explosionPrefab;
 
+        [Header("Despawn")]
+        public float lifeTime = 8f;                // Hapus otomatis setelah sekian detik
+        public float stuckSpeedThreshold = 0.5f;   // Jika kecepatan di bawah ini dianggap "tersangkut"
+        public float stuckDespawnDelay = 1.0f;     // Tunggu sekian detik setelah tersangkut lalu hapus
+
         private Rigidbody rb;
         private Collider arrowCollider;
 
         [HideInInspector] public Collider shooterCollider; // Untuk abaikan collision dengan pemanah sendiri
 
         private bool canHit = false; // Delay agar panah tidak langsung meledak saat spawn
+        private bool isDead = false; // Flag agar efek/destroy hanya dijalankan sekali
+        private float stuckTimer = 0f;
 
         private void Awake()
         {
@@ -39,6 +46,9 @@ namespace AdventureGame
 
             // Aktifkan deteksi tabrakan setelah delay
             StartCoroutine(EnableHitAfterDelay(0.2f));
+
+            // Auto-destroy setelah lifeTime (cadangan)
+            StartCoroutine(DestroyAfterDelay(lifeTime));
         }
 
         private IEnumerator EnableHitAfterDelay(float delay)
@@ -47,19 +57,49 @@ namespace AdventureGame
             canHit = true;
         }
 
+        private IEnumerator DestroyAfterDelay(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            if (!isDead)
+            {
+                // Optional: bisa spawn efek kecil atau suara "puff" sebelum destroy
+                Destroy(gameObject);
+            }
+        }
+
         private void FixedUpdate()
         {
-            if (target == null) return;
-
-            // Belok ke arah target secara halus
-            Vector3 direction = (target.position - transform.position).normalized;
-            Vector3 newVelocity = Vector3.RotateTowards(rb.velocity, direction * speed, rotateSpeed * Time.fixedDeltaTime, 0f);
-            rb.velocity = newVelocity;
+            if (target == null)
+            {
+                // optional: masih mau arahkan kalau gak ada target? skip.
+            }
+            else
+            {
+                // Belok ke arah target secara halus
+                Vector3 direction = (target.position - transform.position).normalized;
+                Vector3 newVelocity = Vector3.RotateTowards(rb.velocity, direction * speed, rotateSpeed * Time.fixedDeltaTime, 0f);
+                rb.velocity = newVelocity;
+            }
 
             // Rotasi panah mengikuti arah terbang
             if (rb.velocity.sqrMagnitude > 0.1f)
             {
                 transform.rotation = Quaternion.LookRotation(rb.velocity);
+            }
+
+            // DETEKSI "TERSANGKUT": jika kecepatan sangat kecil, mulai hitung
+            if (rb.velocity.magnitude < stuckSpeedThreshold)
+            {
+                stuckTimer += Time.fixedDeltaTime;
+                if (stuckTimer >= stuckDespawnDelay && !isDead)
+                {
+                    isDead = true;
+                    Destroy(gameObject);
+                }
+            }
+            else
+            {
+                stuckTimer = 0f;
             }
         }
 
@@ -67,7 +107,9 @@ namespace AdventureGame
         {
             if (!canHit) return; // Belum boleh deteksi benturan
             if (shooterCollider != null && other == shooterCollider) return; // Abaikan pemanah sendiri
+            if (isDead) return; // sudah diproses
 
+            isDead = true; // agar tidak memproses dua kali
             Debug.Log("Arrow hit: " + other.name);
 
             // 💥 Jika kena player
