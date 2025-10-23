@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Linq;
 
 namespace AdventureGame
 {
@@ -12,6 +13,17 @@ namespace AdventureGame
         public GameObject arrowPrefab;
         public Transform arrowSpawnPoint;
         public float arrowSpeed = 10f;
+
+        [Header("Lock Icon Settings")]
+        public GameObject lockIconPrefab;      // prefab ikon lock (misalnya target indicator)
+        private GameObject currentLockIcon;    // instance yang sedang aktif
+        private Transform currentTarget;       // target terdekat saat ini
+        public Vector3 lockIconOffset = Vector3.zero;
+
+        void Update()
+        {
+            UpdateLockIcon();
+        }
 
         public void ShootAutoAim()
         {
@@ -67,6 +79,50 @@ namespace AdventureGame
             }
 
             return closest;
+        }
+
+        private void UpdateLockIcon()
+        {
+            // Temukan target terdekat setiap frame
+            GameObject nearest = FindClosestTarget();
+
+            // Jika tidak ada target dalam radius, hapus ikon
+            if (nearest == null)
+            {
+                if (currentLockIcon != null)
+                {
+                    Destroy(currentLockIcon);
+                    currentLockIcon = null;
+                    currentTarget = null;
+                }
+                return;
+            }
+
+            // Jika target berubah, buat ulang ikon
+            if (nearest.transform != currentTarget)
+            {
+                currentTarget = nearest.transform;
+
+                // Hapus ikon lama
+                if (currentLockIcon != null)
+                    Destroy(currentLockIcon);
+
+                // Buat ikon baru di atas target
+                if (lockIconPrefab != null)
+                {
+                    currentLockIcon = Instantiate(
+                        lockIconPrefab,
+                        currentTarget.position + lockIconOffset,
+                        Quaternion.identity,
+                        currentTarget
+                    );
+                }
+            }
+            else if (currentLockIcon != null)
+            {
+                // Update posisi agar tetap di atas target
+                currentLockIcon.transform.position = currentTarget.position + lockIconOffset;
+            }
         }
 
         private void OnDrawGizmosSelected()

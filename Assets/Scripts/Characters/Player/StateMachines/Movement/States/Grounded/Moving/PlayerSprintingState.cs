@@ -82,6 +82,7 @@ namespace AdventureGame
             base.AddInputActionsCallbacks();
 
             stateMachine.Player.Input.PlayerActions.Sprint.performed += OnSprintPerformed;
+            stateMachine.Player.Input.PlayerActions.AttackMode.started += OnAttackMode;
         }
 
         protected override void RemoveInputActionsCallbacks()
@@ -89,6 +90,12 @@ namespace AdventureGame
             base.RemoveInputActionsCallbacks();
 
             stateMachine.Player.Input.PlayerActions.Sprint.performed -= OnSprintPerformed;
+            stateMachine.Player.Input.PlayerActions.AttackMode.started -= OnAttackMode;
+        }
+
+        private void OnAttackMode(InputAction.CallbackContext context)
+        {
+            stateMachine.ChangeState(stateMachine.AttackState);
         }
 
         private void OnSprintPerformed(InputAction.CallbackContext context)

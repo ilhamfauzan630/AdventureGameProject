@@ -105,14 +105,14 @@ namespace AdventureGame
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!canHit) return; // Belum boleh deteksi benturan
-            if (shooterCollider != null && other == shooterCollider) return; // Abaikan pemanah sendiri
-            if (isDead) return; // sudah diproses
+            if (!canHit) return;
+            if (shooterCollider != null && other == shooterCollider) return;
+            if (isDead) return;
 
-            isDead = true; // agar tidak memproses dua kali
+            isDead = true;
             Debug.Log("Arrow hit: " + other.name);
 
-            // 💥 Jika kena player
+            // Jika kena player
             if (other.CompareTag("Player"))
             {
                 var health = other.GetComponent<Ilumisoft.HealthSystem.Health>();
@@ -122,15 +122,29 @@ namespace AdventureGame
                 }
             }
 
-            // 🔸 Efek ledakan visual (opsional)
+            // Jika kena enemy / target yang bisa hancur
+            if (other.CompareTag("Target"))
+            {
+                // Bisa spawn efek dulu
+                if (explosionPrefab != null)
+                {
+                    GameObject explosion = Instantiate(explosionPrefab, other.transform.position, Quaternion.identity);
+                    Destroy(explosion, 1.5f);
+                }
+
+                Destroy(other.gameObject); // Hancurkan target
+            }
+
+            // Efek ledakan visual panah
             if (explosionPrefab != null)
             {
                 GameObject explosion = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
                 explosion.transform.SetParent(other.transform);
-                Destroy(explosion, 1.5f); // hancurkan efek setelah 1.5 detik
+                Destroy(explosion, 1.5f);
             }
 
-            Destroy(gameObject);
+            Destroy(gameObject); // Hancurkan panah
         }
+
     }
 }
