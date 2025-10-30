@@ -7974,6 +7974,7 @@ MonoBehaviour:
   arrowSpawnPoint: {fileID: 2699796718490056556}
   arrowSpeed: 10
   lockIconPrefab: {fileID: 8552915576608939003, guid: c2d6ef8a5305a5a47a6458e7967163e5, type: 3}
+  lockIconOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &3092813952337054060
 GameObject:
   m_ObjectHideFlags: 0
@@ -13478,7 +13479,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Health>k__BackingField: {fileID: 8833913519751636550}
   canvas: {fileID: 8383174051231671039}
-  fillImage: {fileID: 0}
+  fillImage: {fileID: 3988332764483547454}
   hideEmpty: 0
   alignWithCamera: 0
   changeSpeed: 100
