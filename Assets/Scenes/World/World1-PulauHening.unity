@@ -14,8 +14,8 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 0
-  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  m_Fog: 1
+  m_FogColor: {r: 0.26290488, g: 0.5252633, b: 0.79622644, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.01
   m_LinearFogStart: 0
@@ -26111,6 +26111,8 @@ MonoBehaviour:
   arrowPrefab: {fileID: 382107429026174863, guid: 2c860ddf2e125e146ac39b200c92180d, type: 3}
   arrowSpawnPoint: {fileID: 5787910523067082906}
   arrowSpeed: 10
+  lockIconPrefab: {fileID: 0}
+  lockIconOffset: {x: 0, y: 0, z: 0}
 --- !u!4 &6892582995995270725
 Transform:
   m_ObjectHideFlags: 0
