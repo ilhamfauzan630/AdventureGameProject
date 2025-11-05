@@ -133,6 +133,9 @@ namespace AdventureGame
                 }
 
                 Destroy(other.gameObject); // Hancurkan target
+
+                if (GameManager.Instance != null)
+                    GameManager.Instance.RegisterHit();
             }
 
             // Efek ledakan visual panah
