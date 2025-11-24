@@ -1,61 +1,103 @@
 using UnityEngine;
-using System.Linq;
+using TMPro;
 
 namespace AdventureGame
 {
     public class PlayerBow : MonoBehaviour
     {
-        [Header("Auto Aim Settings")]
-        public float autoAimRadius = 10f;
-        public string targetTag = "Enemy";
+        [Header("Ammo Settings")]
+        public int maxArrows = 15;
+        public int currentArrows = 10;
+
+        [Header("UI References")]
+        public TextMeshProUGUI ammoText;         // tampilkan jumlah panah
+        public TextMeshProUGUI noAmmoText;       // tulisan "Panah Habis!"
+        public float noAmmoDisplayTime = 1.5f;   // durasi muncul teks panah habis
+        private float noAmmoTimer;
 
         [Header("Arrow Settings")]
         public GameObject arrowPrefab;
         public Transform arrowSpawnPoint;
-        public float arrowSpeed = 10f;
+        public float arrowSpeed = 15f;
+
+        [Header("Auto Aim Settings")]
+        public float autoAimRadius = 10f;
+        public string targetTag = "Enemy";
 
         [Header("Lock Icon Settings")]
-        public GameObject lockIconPrefab;      // prefab ikon lock (misalnya target indicator)
-        private GameObject currentLockIcon;    // instance yang sedang aktif
-        private Transform currentTarget;       // target terdekat saat ini
+        public GameObject lockIconPrefab;
+        private GameObject currentLockIcon;
+        private Transform currentTarget;
         public Vector3 lockIconOffset = Vector3.zero;
+
+        void Start()
+        {
+            UpdateAmmoText();
+            if (noAmmoText != null)
+                noAmmoText.gameObject.SetActive(false);
+        }
 
         void Update()
         {
             UpdateLockIcon();
+            HandleNoAmmoText();
         }
 
         public void ShootAutoAim()
         {
-            // Cari target
+            if (currentArrows <= 0)
+            {
+                ShowNoAmmoText();
+                return;
+            }
+
+            currentArrows--;
+            UpdateAmmoText();
+
             GameObject target = FindClosestTarget();
-            Vector3 shootDirection;
+            Vector3 direction = target != null ?
+                (target.transform.position - arrowSpawnPoint.position).normalized :
+                transform.forward;
 
-            if (target != null)
-            {
-                shootDirection = (target.transform.position - arrowSpawnPoint.position).normalized;
-                Debug.Log("🎯 Target ditemukan: " + target.name);
-            }
-            else
-            {
-                shootDirection = transform.forward;
-                Debug.Log("❌ Tidak ada target dalam radius");
-            }
+            GameObject arrowObj = Instantiate(
+                arrowPrefab,
+                arrowSpawnPoint.position,
+                Quaternion.LookRotation(direction)
+            );
 
-            // Spawn arrow
-            GameObject arrowObj = Instantiate(arrowPrefab, arrowSpawnPoint.position, Quaternion.LookRotation(shootDirection));
-            Arrow arrow = arrowObj.GetComponent<Arrow>();
             Rigidbody rb = arrowObj.GetComponent<Rigidbody>();
-
             if (rb != null)
-            {
-                rb.velocity = shootDirection * arrowSpeed;
-            }
+                rb.velocity = direction * arrowSpeed;
+        }
 
-            if (arrow != null && target != null)
+        private void UpdateAmmoText()
+        {
+            if (ammoText != null)
             {
-                arrow.target = target.transform; // 👉 berikan target ke arrow
-                arrow.speed = arrowSpeed;        // sinkron dengan bow
+                ammoText.text = $"Arrows: {currentArrows} / {maxArrows}";
+            }
+        }
+
+        private void ShowNoAmmoText()
+        {
+            if (noAmmoText != null)
+            {
+                noAmmoText.gameObject.SetActive(true);
+                noAmmoTimer = noAmmoDisplayTime;
+            }
+        }
+
+        private void HandleNoAmmoText()
+        {
+            if (noAmmoText == null) return;
+
+            if (noAmmoTimer > 0)
+            {
+                noAmmoTimer -= Time.deltaTime;
+                if (noAmmoTimer <= 0)
+                {
+                    noAmmoText.gameObject.SetActive(false);
+                }
             }
         }
 
@@ -63,64 +105,53 @@ namespace AdventureGame
         {
             Collider[] hits = Physics.OverlapSphere(transform.position, autoAimRadius);
             GameObject closest = null;
-            float minDistance = Mathf.Infinity;
+            float minDist = Mathf.Infinity;
 
-            foreach (Collider hit in hits)
+            foreach (var hit in hits)
             {
                 if (hit.CompareTag(targetTag))
                 {
-                    float distance = Vector3.Distance(transform.position, hit.transform.position);
-                    if (distance < minDistance)
+                    float dist = Vector3.Distance(transform.position, hit.transform.position);
+                    if (dist < minDist)
                     {
-                        minDistance = distance;
+                        minDist = dist;
                         closest = hit.gameObject;
                     }
                 }
             }
-
             return closest;
         }
 
         private void UpdateLockIcon()
         {
-            // Temukan target terdekat setiap frame
             GameObject nearest = FindClosestTarget();
 
-            // Jika tidak ada target dalam radius, hapus ikon
             if (nearest == null)
             {
                 if (currentLockIcon != null)
-                {
                     Destroy(currentLockIcon);
-                    currentLockIcon = null;
-                    currentTarget = null;
-                }
+
+                currentLockIcon = null;
+                currentTarget = null;
                 return;
             }
 
-            // Jika target berubah, buat ulang ikon
             if (nearest.transform != currentTarget)
             {
                 currentTarget = nearest.transform;
 
-                // Hapus ikon lama
                 if (currentLockIcon != null)
                     Destroy(currentLockIcon);
 
-                // Buat ikon baru di atas target
-                if (lockIconPrefab != null)
-                {
-                    currentLockIcon = Instantiate(
-                        lockIconPrefab,
-                        currentTarget.position + lockIconOffset,
-                        Quaternion.identity,
-                        currentTarget
-                    );
-                }
+                currentLockIcon = Instantiate(
+                    lockIconPrefab,
+                    currentTarget.position + lockIconOffset,
+                    Quaternion.identity,
+                    currentTarget
+                );
             }
-            else if (currentLockIcon != null)
+            else if (currentLockIcon)
             {
-                // Update posisi agar tetap di atas target
                 currentLockIcon.transform.position = currentTarget.position + lockIconOffset;
             }
         }

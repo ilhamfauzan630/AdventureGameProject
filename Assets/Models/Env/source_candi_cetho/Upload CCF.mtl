@@ -1,0 +1,124 @@
+newmtl initialShadingGroup
+illum 4
+Kd 0.50 0.50 0.50
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl phongE1SG
+illum 4
+Kd 0.40 0.40 0.40
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.50 0.50 0.50
+newmtl phongE2SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd tekstur bawah_COLOR.jpg
+bump tekstur bawah_NRM.jpg -bm 1
+Ni 1.00
+Ks 0.50 0.50 0.50
+newmtl phongE3SG
+illum 4
+Kd 0.40 0.40 0.40
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.50 0.50 0.50
+newmtl phongE4SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Tekstur tengah 1_COLOR.jpg
+bump Tekstur tengah 1_NRM.jpg -bm 1
+Ni 1.00
+Ks 0.50 0.50 0.50
+newmtl phongE5SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd tiang 1_COLOR.jpg
+bump tiang 1_NRM.jpg -bm 1
+Ni 1.00
+Ks 0.50 0.50 0.50
+newmtl phongE6SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd tekstur tengah 2_COLOR.jpg
+bump tekstur tengah 2_NRM.jpg -bm 1
+Ni 1.00
+Ks 0.50 0.50 0.50
+newmtl phongE7SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd tiang 2_COLOR.jpg
+bump tekstur tengah 2_NRM.jpg -bm 1
+Ni 1.00
+Ks 0.50 0.50 0.50
+newmtl phongE8SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Tekstur tengah 1_COLOR.jpg
+bump Tekstur tengah 1_NRM.jpg -bm 1
+Ni 1.00
+Ks 0.50 0.50 0.50
+newmtl phongE9SG
+illum 4
+Kd 0.40 0.40 0.40
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.50 0.50 0.50
+newmtl phongE10SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd tiang 2_COLOR.jpg
+bump tiang 2_NRM.jpg -bm 1
+Ni 1.00
+Ks 0.50 0.50 0.50
+newmtl phongE11SG
+illum 4
+Kd 0.40 0.40 0.40
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.50 0.50 0.50
+newmtl phongE12SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd tiang 2_COLOR.jpg
+bump tiang 2_NRM.jpg -bm 1
+Ni 1.00
+Ks 0.50 0.50 0.50
+newmtl phongE13SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd kalamakara_COLOR.jpg
+bump kalamakara_NRM.jpg -bm 1
+Ni 1.00
+Ks 0.50 0.50 0.50
+newmtl phongE14SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd ornamen_COLOR.jpg
+bump ornamen_NRM.jpg -bm 1
+Ni 1.00
+Ks 0.50 0.50 0.50

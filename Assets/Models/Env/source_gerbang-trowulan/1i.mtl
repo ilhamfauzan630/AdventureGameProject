@@ -1,0 +1,160 @@
+# Wavefront .mtl file  -  created by SpaceDraw
+
+# File created: 21-01-18, 17:04
+
+newmtl brick2-36040
+Ns 55.8
+d 1.0
+Tr 0.0
+illum 2
+Ka 1.0 0.4509 0.21959999 
+Kd 1.0 0.4509 0.21959999 
+Ks 0.2823 0.117599994 0.054899998 
+Ke 0.109799996 0.1803 0.31759998 
+map_Ka brick2.jpg
+map_Kd brick2.jpg
+
+newmtl brick2-11718876
+Ns 55.8
+d 1.0
+Tr 0.0
+illum 2
+Ka 0.3019 0.18429999 0.14109999 
+Kd 0.3019 0.18429999 0.14109999 
+Ks 0.2823 0.117599994 0.054899998 
+Ke 0.109799996 0.1803 0.31759998 
+map_Ka brick2.jpg
+map_Kd brick2.jpg
+
+newmtl brick2-10146282
+Ns 55.8
+d 1.0
+Tr 0.0
+illum 2
+Ka 0.396 0.1803 0.0862 
+Kd 0.396 0.1803 0.0862 
+Ks 0.2823 0.117599994 0.054899998 
+Ke 0.109799996 0.1803 0.31759998 
+map_Ka brick2.jpg
+map_Kd brick2.jpg
+
+newmtl brick2-2530767
+Ns 55.8
+d 1.0
+Tr 0.0
+illum 2
+Ka 0.8509 0.3843 0.19209999 
+Kd 0.8509 0.3843 0.19209999 
+Ks 0.2823 0.117599994 0.054899998 
+Ke 0.109799996 0.1803 0.31759998 
+map_Ka brick2.jpg
+map_Kd brick2.jpg
+
+newmtl brick23-2849939
+Ns 10.0
+d 1.0
+Tr 0.0
+illum 2
+Ka 0.83129996 0.5137 0.4274 
+Kd 0.83129996 0.5137 0.4274 
+Ks 0.0 0.0 0.0 
+Ke 0.0 0.0 0.0 
+map_Ka brick2.jpg
+map_Kd brick2.jpg
+
+newmtl brick21-25220
+Ns 10.0
+d 1.0
+Tr 0.0
+illum 2
+Ka 1.0 0.6156 0.48619998 
+Kd 1.0 0.6156 0.48619998 
+Ks 0.0 0.0 0.0 
+Ke 0.0 0.0 0.0 
+map_Ka brick2.jpg
+map_Kd brick2.jpg
+
+newmtl brick22-26225
+Ns 10.0
+d 1.0
+Tr 0.0
+illum 2
+Ka 1.0 0.59999996 0.5607 
+Kd 1.0 0.59999996 0.5607 
+Ks 0.0 0.0 0.0 
+Ke 0.0 0.0 0.0 
+map_Ka brick2.jpg
+map_Kd brick2.jpg
+
+newmtl wall2
+Ns 10.0
+d 1.0
+Tr 0.0
+illum 2
+Ka 0.6117 0.6117 0.6117 
+Kd 0.6117 0.6117 0.6117 
+Ks 0.0 0.0 0.0 
+Ke 0.0 0.0 0.0 
+map_Ka wall.jpg
+map_Kd wall.jpg
+
+newmtl rusted2-11447983
+Ns 10.0
+d 1.0
+Tr 0.0
+illum 2
+Ka 0.31759998 0.31759998 0.31759998 
+Kd 0.31759998 0.31759998 0.31759998 
+Ks 0.29799998 0.29799998 0.29799998 
+Ke 0.0 0.0 0.0 
+map_Ka rusted2.jpg
+map_Kd rusted2.jpg
+
+newmtl brick23
+Ns 10.0
+d 1.0
+Tr 0.0
+illum 2
+Ka 0.82739997 0.5176 0.5294 
+Kd 0.82739997 0.5176 0.5294 
+Ks 0.0 0.0 0.0 
+Ke 0.0 0.0 0.0 
+map_Ka brick2.jpg
+map_Kd brick2.jpg
+
+newmtl brick24-4624287
+Ns 10.0
+d 1.0
+Tr 0.0
+illum 2
+Ka 0.7254 0.43919998 0.3803 
+Kd 0.7254 0.43919998 0.3803 
+Ks 0.0 0.0 0.0 
+Ke 0.0 0.0 0.0 
+map_Ka brick2.jpg
+map_Kd brick2.jpg
+
+newmtl brick25-1
+Ns 10.0
+d 1.0
+Tr 0.0
+illum 2
+Ka 1.0 1.0 1.0 
+Kd 1.0 1.0 1.0 
+Ks 0.0 0.0 0.0 
+Ke 0.0 0.0 0.0 
+map_Ka brick2.jpg
+map_Kd brick2.jpg
+
+newmtl brick29-1
+Ns 10.0
+d 1.0
+Tr 0.0
+illum 2
+Ka 1.0 1.0 1.0 
+Kd 1.0 1.0 1.0 
+Ks 0.0 0.0 0.0 
+Ke 0.0 0.0 0.0 
+map_Ka brick2.jpg
+map_Kd brick2.jpg
+
