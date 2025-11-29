@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 46628610}
   - component: {fileID: 46628609}
   - component: {fileID: 46628608}
+  - component: {fileID: 46628611}
   m_Layer: 0
   m_Name: oldlady (2)
   m_TagString: Untagged
@@ -205,6 +206,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -86.489, z: 0}
+--- !u!65 &46628611
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 46628607}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.06779781, y: 0.10649956, z: 0.06612566}
+  m_Center: {x: -0.0011788198, y: 0.05355447, z: 0.0054403967}
 --- !u!1 &114993444
 GameObject:
   m_ObjectHideFlags: 0
@@ -10157,6 +10179,7 @@ GameObject:
   - component: {fileID: 342239339}
   - component: {fileID: 342239338}
   - component: {fileID: 342239337}
+  - component: {fileID: 342239340}
   m_Layer: 0
   m_Name: oldlady (7)
   m_TagString: Untagged
@@ -10229,6 +10252,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!65 &342239340
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 342239336}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.06779782, y: 0.10649956, z: 0.06612567}
+  m_Center: {x: -0.0011788199, y: 0.05355447, z: 0.0054403977}
 --- !u!1 &401178477
 GameObject:
   m_ObjectHideFlags: 0
@@ -19977,6 +20021,7 @@ GameObject:
   - component: {fileID: 607801724}
   - component: {fileID: 607801723}
   - component: {fileID: 607801722}
+  - component: {fileID: 607801725}
   m_Layer: 0
   m_Name: oldlady (5)
   m_TagString: Untagged
@@ -20049,6 +20094,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!65 &607801725
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 607801721}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.06779782, y: 0.10649956, z: 0.06612567}
+  m_Center: {x: -0.0011788199, y: 0.05355447, z: 0.0054403977}
 --- !u!1 &622784169
 GameObject:
   m_ObjectHideFlags: 0
@@ -49423,6 +49489,7 @@ GameObject:
   - component: {fileID: 1196773373}
   - component: {fileID: 1196773372}
   - component: {fileID: 1196773371}
+  - component: {fileID: 1196773374}
   m_Layer: 0
   m_Name: oldlady (3)
   m_TagString: Untagged
@@ -49495,6 +49562,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -86.489, z: 0}
+--- !u!65 &1196773374
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1196773370}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.06779781, y: 0.10649956, z: 0.06612566}
+  m_Center: {x: -0.0011788198, y: 0.05355447, z: 0.0054403967}
 --- !u!1 &1197963496
 GameObject:
   m_ObjectHideFlags: 0
@@ -78883,6 +78971,7 @@ GameObject:
   - component: {fileID: 1649741491}
   - component: {fileID: 1649741490}
   - component: {fileID: 1649741489}
+  - component: {fileID: 1649741492}
   m_Layer: 0
   m_Name: oldlady (4)
   m_TagString: Untagged
@@ -78955,6 +79044,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!65 &1649741492
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1649741488}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.06779782, y: 0.10649956, z: 0.06612567}
+  m_Center: {x: -0.0011788199, y: 0.05355447, z: 0.0054403977}
 --- !u!1 &1655348804
 GameObject:
   m_ObjectHideFlags: 0
@@ -89103,6 +89213,7 @@ GameObject:
   - component: {fileID: 1954567754}
   - component: {fileID: 1954567753}
   - component: {fileID: 1954567752}
+  - component: {fileID: 1954567755}
   m_Layer: 0
   m_Name: oldlady (1)
   m_TagString: Untagged
@@ -89175,6 +89286,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -86.489, z: 0}
+--- !u!65 &1954567755
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1954567751}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.06779781, y: 0.10649956, z: 0.06612566}
+  m_Center: {x: -0.0011788198, y: 0.05355447, z: 0.0054403967}
 --- !u!1 &2031312277
 GameObject:
   m_ObjectHideFlags: 0
@@ -89239,6 +89371,7 @@ GameObject:
   - component: {fileID: 2062018052}
   - component: {fileID: 2062018051}
   - component: {fileID: 2062018050}
+  - component: {fileID: 2062018053}
   m_Layer: 0
   m_Name: oldlady (6)
   m_TagString: Untagged
@@ -89311,6 +89444,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!65 &2062018053
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2062018049}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.06779782, y: 0.10649956, z: 0.06612567}
+  m_Center: {x: -0.0011788199, y: 0.05355447, z: 0.0054403977}
 --- !u!23 &3703066761454795
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -103661,11 +103815,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f630101de011514b83fec975f567acd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoAimRadius: 30
-  targetTag: Target
+  maxArrows: 15
+  currentArrows: 10
+  ammoText: {fileID: 0}
+  noAmmoText: {fileID: 0}
+  noAmmoDisplayTime: 1.5
   arrowPrefab: {fileID: 382107429026174863, guid: 2c860ddf2e125e146ac39b200c92180d, type: 3}
   arrowSpawnPoint: {fileID: 4706751159542187209}
   arrowSpeed: 10
+  autoAimRadius: 30
+  targetTag: Target
   lockIconPrefab: {fileID: 8552915576608939003, guid: c2d6ef8a5305a5a47a6458e7967163e5, type: 3}
   lockIconOffset: {x: 0, y: 0, z: 0}
 --- !u!224 &5663301289468561859
