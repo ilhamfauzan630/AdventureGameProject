@@ -9,40 +9,45 @@ namespace AdventureGame
         public int maxArrows = 15;
         public int currentArrows = 10;
 
-        [Header("UI References")]
-        public TextMeshProUGUI ammoText;         // tampilkan jumlah panah
-        public TextMeshProUGUI noAmmoText;       // tulisan "Panah Habis!"
-        public float noAmmoDisplayTime = 1.5f;   // durasi muncul teks panah habis
+        [Header("UI")]
+        public TextMeshProUGUI ammoText;
+        public TextMeshProUGUI noAmmoText;
+        public float noAmmoDisplayTime = 1.5f;
         private float noAmmoTimer;
 
-        [Header("Arrow Settings")]
+        [Header("Arrow")]
         public GameObject arrowPrefab;
         public Transform arrowSpawnPoint;
-        public float arrowSpeed = 15f;
+        public float arrowSpeed = 20f;
 
-        [Header("Auto Aim Settings")]
-        public float autoAimRadius = 10f;
-        public LayerMask targetLayer;
+        [Header("Auto Aim")]
+        public float autoAimRadius = 12f;
+        public LayerMask targetLayer; // AimTarget
+        public LayerMask enemyLayer;  // Enemy (fallback)
 
-        [Header("Lock Icon Settings")]
+        [Header("Lock Icon")]
         public GameObject lockIconPrefab;
-        private GameObject currentLockIcon;
-        private Transform currentTarget;
         public Vector3 lockIconOffset = Vector3.zero;
 
-        void Start()
+        private GameObject currentLockIcon;
+        private Transform currentLockTarget;
+
+        private void Start()
         {
             UpdateAmmoText();
             if (noAmmoText != null)
                 noAmmoText.gameObject.SetActive(false);
         }
 
-        void Update()
+        private void Update()
         {
             UpdateLockIcon();
             HandleNoAmmoText();
         }
 
+        // ======================
+        // SHOOT
+        // ======================
         public void ShootAutoAim()
         {
             if (currentArrows <= 0)
@@ -54,28 +59,106 @@ namespace AdventureGame
             currentArrows--;
             UpdateAmmoText();
 
-            GameObject target = FindClosestTarget();
-            Vector3 direction = target != null ?
-                (target.transform.position - arrowSpawnPoint.position).normalized :
-                transform.forward;
+            Transform aimTarget = GetFinalAimTarget();
 
-            GameObject arrowObj = Instantiate(
+            Vector3 direction = aimTarget != null
+                ? (aimTarget.position - arrowSpawnPoint.position).normalized
+                : transform.forward;
+
+            GameObject arrow = Instantiate(
                 arrowPrefab,
                 arrowSpawnPoint.position,
                 Quaternion.LookRotation(direction)
             );
 
-            Rigidbody rb = arrowObj.GetComponent<Rigidbody>();
+            Rigidbody rb = arrow.GetComponent<Rigidbody>();
             if (rb != null)
+            {
                 rb.velocity = direction * arrowSpeed;
+            }
         }
 
+        // ======================
+        // AIM LOGIC
+        // ======================
+        private Transform GetFinalAimTarget()
+        {
+            // PRIORITAS 1 → Target
+            Transform target = FindClosestByLayer(targetLayer);
+            if (target != null)
+                return target;
+
+            // PRIORITAS 2 → Enemy
+            return FindClosestByLayer(enemyLayer);
+        }
+
+        private Transform FindClosestByLayer(LayerMask layer)
+        {
+            Collider[] hits = Physics.OverlapSphere(
+                transform.position,
+                autoAimRadius,
+                layer
+            );
+
+            Transform closest = null;
+            float minDist = Mathf.Infinity;
+
+            foreach (var hit in hits)
+            {
+                float dist = Vector3.Distance(transform.position, hit.transform.position);
+                if (dist < minDist)
+                {
+                    minDist = dist;
+                    closest = hit.transform;
+                }
+            }
+
+            return closest;
+        }
+
+        // ======================
+        // LOCK ICON (TARGET ONLY)
+        // ======================
+        private void UpdateLockIcon()
+        {
+            Transform target = FindClosestByLayer(targetLayer);
+
+            if (target == null)
+            {
+                ClearLockIcon();
+                return;
+            }
+
+            if (target != currentLockTarget)
+            {
+                ClearLockIcon();
+                currentLockTarget = target;
+
+                currentLockIcon = Instantiate(
+                    lockIconPrefab,
+                    currentLockTarget.position + lockIconOffset,
+                    Quaternion.identity,
+                    currentLockTarget
+                );
+            }
+        }
+
+        private void ClearLockIcon()
+        {
+            if (currentLockIcon != null)
+                Destroy(currentLockIcon);
+
+            currentLockIcon = null;
+            currentLockTarget = null;
+        }
+
+        // ======================
+        // UI
+        // ======================
         private void UpdateAmmoText()
         {
             if (ammoText != null)
-            {
                 ammoText.text = $"Arrows: {currentArrows} / {maxArrows}";
-            }
         }
 
         private void ShowNoAmmoText()
@@ -101,58 +184,9 @@ namespace AdventureGame
             }
         }
 
-        private GameObject FindClosestTarget()
-        {
-            Collider[] hits = Physics.OverlapSphere(transform.position, autoAimRadius, targetLayer);
-            GameObject closest = null;
-            float minDist = Mathf.Infinity;
-
-            foreach (var hit in hits)
-            {
-                float dist = Vector3.Distance(transform.position, hit.transform.position);
-                if (dist < minDist)
-                {
-                    minDist = dist;
-                    closest = hit.gameObject;
-                }
-            }
-
-            return closest;
-        }
-        private void UpdateLockIcon()
-        {
-            GameObject nearest = FindClosestTarget();
-
-            if (nearest == null)
-            {
-                if (currentLockIcon != null)
-                    Destroy(currentLockIcon);
-
-                currentLockIcon = null;
-                currentTarget = null;
-                return;
-            }
-
-            if (nearest.transform != currentTarget)
-            {
-                currentTarget = nearest.transform;
-
-                if (currentLockIcon != null)
-                    Destroy(currentLockIcon);
-
-                currentLockIcon = Instantiate(
-                    lockIconPrefab,
-                    currentTarget.position + lockIconOffset,
-                    Quaternion.identity,
-                    currentTarget
-                );
-            }
-            else if (currentLockIcon)
-            {
-                currentLockIcon.transform.position = currentTarget.position + lockIconOffset;
-            }
-        }
-
+        // ======================
+        // DEBUG
+        // ======================
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.yellow;
