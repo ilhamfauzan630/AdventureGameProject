@@ -55070,8 +55070,8 @@ MonoBehaviour:
   player: {fileID: 874952426175125965}
   punchHitbox: {fileID: 598658029}
   detectRange: 20
-  walkRange: 10
-  runRange: 5
+  walkRange: 15
+  runRange: 10
   attackRange: 2
   walkSpeed: 1.5
   runSpeed: 4

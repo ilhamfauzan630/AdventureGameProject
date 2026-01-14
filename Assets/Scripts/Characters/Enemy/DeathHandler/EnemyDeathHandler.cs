@@ -31,26 +31,32 @@ namespace AdventureGame
             if (hasDied) return;
             hasDied = true;
 
-            Debug.Log("☠ EnemyDeathHandler: Enemy mati!");
+            Debug.Log("☠ Enemy mati!");
 
             // Animasi mati
             animator.SetTrigger("Die");
 
             // Matikan AI
             var agent = GetComponent<NavMeshAgent>();
-            if (agent != null)
-                agent.enabled = false;
+            if (agent != null) agent.enabled = false;
 
-            var ai = GetComponent<EnemyGolemAI>(); // kalau ada
-            if (ai != null)
-                ai.enabled = false;
+            var ai = GetComponent<EnemyGolemAI>();
+            if (ai != null) ai.enabled = false;
 
-            // Matikan collider
-            var col = GetComponent<Collider>();
-            if (col != null)
-                col.enabled = false;
+            // KUNCI PHYSICS
+            var rb = GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+                rb.isKinematic = true;
+                rb.constraints = RigidbodyConstraints.FreezeAll;
+            }
 
-            // Optional: destroy setelah animasi
+            // Ganti layer (opsional)
+            gameObject.layer = LayerMask.NameToLayer("DeadEnemy");
+
+            // Destroy setelah animasi
             Destroy(gameObject, 5f);
         }
     }
