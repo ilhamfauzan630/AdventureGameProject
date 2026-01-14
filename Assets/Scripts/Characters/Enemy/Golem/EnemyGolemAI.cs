@@ -1,127 +1,144 @@
-using Ilumisoft.HealthSystem;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace AdventureGame
+public class EnemyGolemAI : MonoBehaviour
 {
-    public class EnemyGolemAI : MonoBehaviour
+    [Header("Target")]
+    public Transform player;
+    
+    [Header("Hitbox")]
+    public GameObject punchHitbox;
+
+    [Header("Range")]
+    public float detectRange = 15f;
+    public float walkRange = 10f;
+    public float runRange = 5f;
+    public float attackRange = 2f;
+
+    [Header("Speed")]
+    public float walkSpeed = 1.5f;
+    public float runSpeed = 4f;
+
+    [Header("Attack")]
+    public float attackCooldown = 2f;
+    private float lastAttackTime;
+
+    [Header("Rotation")]
+    public float rotationSpeed = 5f;
+
+    private NavMeshAgent agent;
+    private Animator animator;
+    private bool isAttacking;
+
+    void Start()
     {
-        [Header("References")]
-        public Transform player;
-        public NavMeshAgent agent;
-        private Animator anim;
+        agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
+        agent.stoppingDistance = attackRange - 0.2f;
+    }
 
-        [Header("Distances")]
-        public float detectRange = 15f;
-        public float walkRange = 10f;
-        public float runRange = 5f;
-        public float attackRange = 2.2f;
+    void Update()
+    {
+        float distance = Vector3.Distance(transform.position, player.position);
 
-        [Header("Attack Settings")]
-        public float attackCooldown = 2f;
-        private float attackTimer;
+        if (isAttacking) return;
 
-        public float jumpAttackChance = 0.25f;  // 25% chance
-        public float jumpAttackCooldown = 7f;
-        private float jumpTimer;
-
-        private bool isDead = false;
-
-        private void Start()
+        if (distance <= attackRange)
         {
-            anim = GetComponent<Animator>();
+            Attack();
+        }
+        else if (distance <= runRange)
+        {
+            Run();
+        }
+        else if (distance <= detectRange)
+        {
+            Walk();
+        }
+        else
+        {
+            Idle();
         }
 
-        private void Update()
+        RotateToPlayer();
+        UpdateAnimation();
+    }
+
+    void Idle()
+    {
+        agent.isStopped = true;
+        animator.SetBool("IsWalk", false);
+        animator.SetBool("IsRun", false);
+    }
+
+    void Walk()
+    {
+        agent.isStopped = false;
+        agent.speed = walkSpeed;
+        agent.SetDestination(player.position);
+
+        animator.SetBool("IsWalk", true);
+        animator.SetBool("IsRun", false);
+    }
+
+    void Run()
+    {
+        agent.isStopped = false;
+        agent.speed = runSpeed;
+        agent.SetDestination(player.position);
+
+        animator.SetBool("IsWalk", false);
+        animator.SetBool("IsRun", true);
+    }
+
+    void Attack()
+    {
+        if (Time.time < lastAttackTime + attackCooldown) return;
+
+        isAttacking = true;
+        agent.isStopped = true;
+
+        animator.SetBool("IsWalk", false);
+        animator.SetBool("IsRun", false);
+        animator.SetTrigger("Punch");
+        animator.SetBool("IsAttacking", true);
+
+        lastAttackTime = Time.time;
+    }
+
+    public void EnablePunchHitbox()
+    {
+        if (punchHitbox) punchHitbox.SetActive(true);
+    }
+
+    public void DisablePunchHitbox()
+    {
+        if (punchHitbox) punchHitbox.SetActive(false);
+    }
+    public void EndAttack()
+    {
+        isAttacking = false;
+        animator.SetBool("IsAttacking", false);
+    }
+
+    void RotateToPlayer()
+    {
+        Vector3 direction = (player.position - transform.position).normalized;
+        direction.y = 0;
+
+        if (direction != Vector3.zero)
         {
-            if (isDead) return;
-
-            float dist = Vector3.Distance(transform.position, player.position);
-            attackTimer -= Time.deltaTime;
-            jumpTimer -= Time.deltaTime;
-
-            // Set speed parameter for animation
-            anim.SetFloat("speed", agent.velocity.magnitude);
-
-            if (dist > detectRange)
-            {
-                Idle();
-            }
-            else if (dist > walkRange)
-            {
-                WalkToPlayer();
-            }
-            else if (dist > runRange)
-            {
-                RunToPlayer();
-            }
-            else if (dist <= attackRange)
-            {
-                AttackPlayer();
-            }
+            Quaternion lookRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                lookRotation,
+                Time.deltaTime * rotationSpeed
+            );
         }
+    }
 
-        private void Idle()
-        {
-            agent.isStopped = true;
-        }
-
-        private void WalkToPlayer()
-        {
-            agent.isStopped = false;
-            agent.speed = 1.5f;   // jalan
-            agent.SetDestination(player.position);
-        }
-
-        private void RunToPlayer()
-        {
-            agent.isStopped = false;
-            agent.speed = 3.5f;   // lari
-            agent.SetDestination(player.position);
-        }
-
-        private void AttackPlayer()
-        {
-            agent.isStopped = true;
-            transform.LookAt(player);
-
-            if (attackTimer <= 0f)
-            {
-                // Randomly choose between normal attack or jump attack
-                if (jumpTimer <= 0f && Random.value < jumpAttackChance)
-                {
-                    anim.SetTrigger("jumpAttack");
-                    jumpTimer = jumpAttackCooldown;
-                }
-                else
-                {
-                    anim.SetTrigger("attack");
-                }
-
-                attackTimer = attackCooldown;
-            }
-        }
-
-        // Dipanggil dari Animation Event
-        public void DealDamage()
-        {
-            if (Vector3.Distance(transform.position, player.position) < attackRange + 0.5f)
-            {
-                var hp = player.GetComponent<Health>();
-                if (hp != null)
-                    hp.ApplyDamage(10);
-            }
-        }
-
-        public void Die()
-        {
-            if (isDead) return;
-
-            isDead = true;
-            agent.isStopped = true;
-            anim.SetTrigger("die");
-
-            Destroy(gameObject, 4f);
-        }
+    void UpdateAnimation()
+    {
+        animator.SetFloat("Speed", agent.velocity.magnitude);
     }
 }

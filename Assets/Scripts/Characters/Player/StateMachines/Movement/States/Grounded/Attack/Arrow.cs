@@ -20,6 +20,8 @@ namespace AdventureGame
         private Rigidbody rb;
         private Collider arrowCollider;
 
+        private int enemyLayer;
+
         [HideInInspector] public Collider shooterCollider; // Untuk abaikan collision dengan pemanah sendiri
 
         private bool canHit = false; // Delay agar panah tidak langsung meledak saat spawn
@@ -31,6 +33,7 @@ namespace AdventureGame
             rb = GetComponent<Rigidbody>();
             rb.useGravity = false;
             arrowCollider = GetComponent<Collider>();
+            enemyLayer = LayerMask.NameToLayer("Enemy");
         }
 
         private void Start()
@@ -112,41 +115,49 @@ namespace AdventureGame
             isDead = true;
             Debug.Log("Arrow hit: " + other.name);
 
-            // Jika kena player
+            // ================= PLAYER =================
             if (other.CompareTag("Player"))
             {
                 var health = other.GetComponent<Ilumisoft.HealthSystem.Health>();
                 if (health != null)
-                {
                     health.ApplyDamage(10f);
+            }
+
+            // ================= ENEMY (PAKAI LAYER) =================
+            if (other.gameObject.layer == enemyLayer)
+            {
+                var health = other.GetComponentInParent<Ilumisoft.HealthSystem.Health>();
+                if (health != null)
+                {
+                    health.ApplyDamage(20f);
+                    Debug.Log("🏹 Enemy terkena panah!");
                 }
             }
 
-            // Jika kena enemy / target yang bisa hancur
-            if (other.CompareTag("Target"))
+            // ================= TARGET (OBJEK HANCUR) =================
+            if (other.CompareTag("Target") && other.gameObject.layer != enemyLayer)
             {
-                // Bisa spawn efek dulu
                 if (explosionPrefab != null)
                 {
-                    GameObject explosion = Instantiate(explosionPrefab, other.transform.position, Quaternion.identity);
+                    var explosion = Instantiate(explosionPrefab, other.transform.position, Quaternion.identity);
                     Destroy(explosion, 1.5f);
                 }
 
-                Destroy(other.gameObject); // Hancurkan target
+                Destroy(other.gameObject);
 
                 if (GameManager.Instance != null)
                     GameManager.Instance.RegisterHit();
             }
 
-            // Efek ledakan visual panah
+            // ================= EFEK PANAH =================
             if (explosionPrefab != null)
             {
-                GameObject explosion = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+                var explosion = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
                 explosion.transform.SetParent(other.transform);
                 Destroy(explosion, 1.5f);
             }
 
-            Destroy(gameObject); // Hancurkan panah
+            Destroy(gameObject);
         }
 
     }

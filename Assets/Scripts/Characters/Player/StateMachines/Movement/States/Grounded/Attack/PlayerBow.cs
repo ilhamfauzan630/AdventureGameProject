@@ -22,7 +22,7 @@ namespace AdventureGame
 
         [Header("Auto Aim Settings")]
         public float autoAimRadius = 10f;
-        public string targetTag = "Enemy";
+        public LayerMask targetLayer;
 
         [Header("Lock Icon Settings")]
         public GameObject lockIconPrefab;
@@ -103,25 +103,22 @@ namespace AdventureGame
 
         private GameObject FindClosestTarget()
         {
-            Collider[] hits = Physics.OverlapSphere(transform.position, autoAimRadius);
+            Collider[] hits = Physics.OverlapSphere(transform.position, autoAimRadius, targetLayer);
             GameObject closest = null;
             float minDist = Mathf.Infinity;
 
             foreach (var hit in hits)
             {
-                if (hit.CompareTag(targetTag))
+                float dist = Vector3.Distance(transform.position, hit.transform.position);
+                if (dist < minDist)
                 {
-                    float dist = Vector3.Distance(transform.position, hit.transform.position);
-                    if (dist < minDist)
-                    {
-                        minDist = dist;
-                        closest = hit.gameObject;
-                    }
+                    minDist = dist;
+                    closest = hit.gameObject;
                 }
             }
+
             return closest;
         }
-
         private void UpdateLockIcon()
         {
             GameObject nearest = FindClosestTarget();
