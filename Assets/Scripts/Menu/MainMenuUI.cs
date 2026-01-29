@@ -5,24 +5,30 @@ namespace AdventureGame
 {
     public class MainMenuUI : MonoBehaviour
     {
+        public GameObject optionsPanel;
+
         public void StartGame()
-    {
-        SceneManager.LoadScene("StageSelect");
-    }
+        {
+            SceneManager.LoadScene("StageSelect");
+        }
 
-    public void OpenOptions()
-    {
-        Debug.Log("Options menu belum dibuat.");
-    }
+        public void OpenOptions()
+        {
+            optionsPanel.SetActive(true);
+        }
 
-    public void QuitGame()
-    {
-        Debug.Log("Quit Game!");
-        Application.Quit();
+        public void CloseOptions()
+        {
+            optionsPanel.SetActive(false);
+        }
 
-        #if UNITY_EDITOR
+        public void QuitGame()
+        {
+            Application.Quit();
+
+            #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
-        #endif
-    }
+            #endif
+        }
     }
 }

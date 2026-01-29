@@ -5,7 +5,7 @@ namespace AdventureGame
 {
     public class Arrow : MonoBehaviour
     {
-        [HideInInspector] public Transform target;  // Target yang dituju
+        [HideInInspector] public Transform target; 
         public float speed = 30f;
         public float rotateSpeed = 10f;
 
@@ -13,19 +13,19 @@ namespace AdventureGame
         public GameObject explosionPrefab;
 
         [Header("Despawn")]
-        public float lifeTime = 8f;                // Hapus otomatis setelah sekian detik
-        public float stuckSpeedThreshold = 0.5f;   // Jika kecepatan di bawah ini dianggap "tersangkut"
-        public float stuckDespawnDelay = 1.0f;     // Tunggu sekian detik setelah tersangkut lalu hapus
+        public float lifeTime = 8f;
+        public float stuckSpeedThreshold = 0.5f;  
+        public float stuckDespawnDelay = 1.0f; 
 
         private Rigidbody rb;
         private Collider arrowCollider;
 
         private int enemyLayer;
 
-        [HideInInspector] public Collider shooterCollider; // Untuk abaikan collision dengan pemanah sendiri
+        [HideInInspector] public Collider shooterCollider;
 
-        private bool canHit = false; // Delay agar panah tidak langsung meledak saat spawn
-        private bool isDead = false; // Flag agar efek/destroy hanya dijalankan sekali
+        private bool canHit = false; 
+        private bool isDead = false; 
         private float stuckTimer = 0f;
 
         private void Awake()
@@ -38,19 +38,16 @@ namespace AdventureGame
 
         private void Start()
         {
-            // Abaikan benturan dengan pemanah sendiri
+            
             if (shooterCollider != null)
             {
                 Physics.IgnoreCollision(arrowCollider, shooterCollider);
             }
 
-            // Luncurkan panah ke depan
             rb.velocity = transform.forward * speed;
 
-            // Aktifkan deteksi tabrakan setelah delay
             StartCoroutine(EnableHitAfterDelay(0.2f));
 
-            // Auto-destroy setelah lifeTime (cadangan)
             StartCoroutine(DestroyAfterDelay(lifeTime));
         }
 
@@ -65,7 +62,6 @@ namespace AdventureGame
             yield return new WaitForSeconds(delay);
             if (!isDead)
             {
-                // Optional: bisa spawn efek kecil atau suara "puff" sebelum destroy
                 Destroy(gameObject);
             }
         }
@@ -74,23 +70,20 @@ namespace AdventureGame
         {
             if (target == null)
             {
-                // optional: masih mau arahkan kalau gak ada target? skip.
+                // mengarahkan panah jika tidak ada target (opsional)
             }
             else
             {
-                // Belok ke arah target secara halus
                 Vector3 direction = (target.position - transform.position).normalized;
                 Vector3 newVelocity = Vector3.RotateTowards(rb.velocity, direction * speed, rotateSpeed * Time.fixedDeltaTime, 0f);
                 rb.velocity = newVelocity;
             }
 
-            // Rotasi panah mengikuti arah terbang
             if (rb.velocity.sqrMagnitude > 0.1f)
             {
                 transform.rotation = Quaternion.LookRotation(rb.velocity);
             }
 
-            // DETEKSI "TERSANGKUT": jika kecepatan sangat kecil, mulai hitung
             if (rb.velocity.magnitude < stuckSpeedThreshold)
             {
                 stuckTimer += Time.fixedDeltaTime;
@@ -123,7 +116,7 @@ namespace AdventureGame
                     health.ApplyDamage(10f);
             }
 
-            // ================= ENEMY (PAKAI LAYER) =================
+            // ================= ENEMY=================
             if (other.gameObject.layer == enemyLayer)
             {
                 var health = other.GetComponentInParent<Ilumisoft.HealthSystem.Health>();
@@ -134,7 +127,7 @@ namespace AdventureGame
                 }
             }
 
-            // ================= TARGET (OBJEK HANCUR) =================
+            // ================= TARGET =================
             if (other.CompareTag("Target") && other.gameObject.layer != enemyLayer)
             {
                 if (explosionPrefab != null)

@@ -17,5 +17,11 @@ namespace AdventureGame
         {
             hoverCorner.gameObject.SetActive(false);
         }
+
+        void OnDisable()
+        {
+            if (hoverCorner != null)
+                hoverCorner.gameObject.SetActive(false);
+        }
     }
 }

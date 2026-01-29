@@ -89533,6 +89533,51 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!1 &1590463894
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1590463896}
+  - component: {fileID: 1590463895}
+  m_Layer: 0
+  m_Name: SceneMusic
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1590463895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1590463894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16f2e6145e5e6fd4c9c0dc6492313b1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneMusic: {fileID: 8300000, guid: bb666ef663e5bc347807150db9325f79, type: 3}
+--- !u!4 &1590463896
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1590463894}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.70710695, y: -0, z: -0, w: 0.7071066}
+  m_LocalPosition: {x: 116.42, y: 8.13, z: 54.34}
+  m_LocalScale: {x: -2.54, y: -2.5399995, z: -2.5399995}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1706390712
 GameObject:
   m_ObjectHideFlags: 0
@@ -113578,11 +113623,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f630101de011514b83fec975f567acd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoAimRadius: 30
-  targetTag: Target
+  maxArrows: 15
+  currentArrows: 10
+  ammoText: {fileID: 0}
+  noAmmoText: {fileID: 0}
+  noAmmoDisplayTime: 1.5
   arrowPrefab: {fileID: 382107429026174863, guid: 2c860ddf2e125e146ac39b200c92180d, type: 3}
   arrowSpawnPoint: {fileID: 5787910523067082906}
   arrowSpeed: 10
+  autoAimRadius: 30
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 4096
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 1024
   lockIconPrefab: {fileID: 8552915576608939003, guid: c2d6ef8a5305a5a47a6458e7967163e5, type: 3}
   lockIconOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &6894440129075505209
@@ -115025,3 +115080,4 @@ SceneRoots:
   - {fileID: 966583966}
   - {fileID: 2001504251}
   - {fileID: 4825647095770795360}
+  - {fileID: 1590463896}

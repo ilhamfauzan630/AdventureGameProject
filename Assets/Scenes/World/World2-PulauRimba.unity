@@ -565,6 +565,51 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &119096414
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 119096416}
+  - component: {fileID: 119096415}
+  m_Layer: 0
+  m_Name: SceneMusic
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &119096415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 119096414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16f2e6145e5e6fd4c9c0dc6492313b1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneMusic: {fileID: 8300000, guid: 50a822719dcd16245a65181fc3337507, type: 3}
+--- !u!4 &119096416
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 119096414}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.34134322, y: -0.6297311, z: 0.56233346, w: 0.4131642}
+  m_LocalPosition: {x: 51.5, y: -5.54, z: 99.87}
+  m_LocalScale: {x: 100.00003, y: 100, z: 100}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &214394141
 GameObject:
   m_ObjectHideFlags: 0
@@ -106041,11 +106086,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f630101de011514b83fec975f567acd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoAimRadius: 30
-  targetTag: Target
+  maxArrows: 15
+  currentArrows: 10
+  ammoText: {fileID: 0}
+  noAmmoText: {fileID: 0}
+  noAmmoDisplayTime: 1.5
   arrowPrefab: {fileID: 382107429026174863, guid: 2c860ddf2e125e146ac39b200c92180d, type: 3}
   arrowSpawnPoint: {fileID: 6085924509175467506}
   arrowSpeed: 10
+  autoAimRadius: 30
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
   lockIconPrefab: {fileID: 8552915576608939003, guid: c2d6ef8a5305a5a47a6458e7967163e5, type: 3}
   lockIconOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &6623096513512748018
@@ -117817,3 +117872,4 @@ SceneRoots:
   - {fileID: 608279965}
   - {fileID: 543450653255799304}
   - {fileID: 6101887669119513947}
+  - {fileID: 119096416}
