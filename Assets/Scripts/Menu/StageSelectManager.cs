@@ -10,22 +10,21 @@ namespace AdventureGame
         [System.Serializable]
         public class StageInfo
         {
-            public string stageName;      // nama scene yang akan di-load, ex: "Stage_Jawa"
-            public string actTitle;       // judul yang tampil, ex: "Act 1: Pulau Jawa"
-            [TextArea] public string description; // deskripsi singkat
-            public Sprite stageImage;     // thumbnail untuk panel info
+            public string stageName;      
+            public string actTitle;      
+            [TextArea] public string description;
+            public Sprite stageImage;
         }
 
         [Header("Stage Data")]
-        public StageInfo[] stages; // isi melalui Inspector
+        public StageInfo[] stages;
 
         [Header("UI References")]
-        public GameObject stageInfoPanel;      // panel yang berisi info stage
-        public Image stageImageUI;             // UI Image untuk thumbnail
-        public TextMeshProUGUI titleText;      // judul
-        public TextMeshProUGUI descText;       // deskripsi
-        public Button playButton;              // tombol play di panel
-
+        public GameObject stageInfoPanel;     
+        public Image stageImageUI;
+        public TextMeshProUGUI titleText;  
+        public TextMeshProUGUI descText; 
+        public Button playButton;  
         private string currentStageScene;
 
         public void LoadStage(string sceneName)
@@ -44,7 +43,6 @@ namespace AdventureGame
                 stageInfoPanel.SetActive(false);
         }
 
-        // Dipanggil saat tombol pulau diklik (pakai StageButton atau OnClick di Inspector)
         public void ShowStageInfo(int index)
         {
             if (index < 0 || index >= stages.Length)
@@ -55,7 +53,6 @@ namespace AdventureGame
 
             StageInfo stage = stages[index];
 
-            // Update UI
             titleText.text = stage.actTitle;
             descText.text = stage.description;
 
@@ -69,13 +66,10 @@ namespace AdventureGame
                 stageImageUI.gameObject.SetActive(false);
             }
 
-            // Simpan nama scene untuk PlayStage
             currentStageScene = stage.stageName;
 
-            // Aktifkan panel
             stageInfoPanel.SetActive(true);
 
-            // Pastikan tombol play aktif jika scene di-set
             if (playButton != null)
                 playButton.interactable = !string.IsNullOrEmpty(currentStageScene);
         }
@@ -88,7 +82,6 @@ namespace AdventureGame
                 return;
             }
 
-            // Load scene gameplay
             SceneManager.LoadScene(currentStageScene);
         }
 
