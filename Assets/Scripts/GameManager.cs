@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI; // untuk akses Text UI
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace AdventureGame
 {
@@ -15,6 +16,8 @@ namespace AdventureGame
         [Header("UI")]
         public TextMeshProUGUI  counterText;
         public GameObject winPanel; // panel win (bisa popup atau text besar)
+
+        public static bool GameEnded = false;
 
         private void Awake()
         {
@@ -41,6 +44,13 @@ namespace AdventureGame
             }
         }
 
+        public void NextStage()
+        {
+            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+
+            SceneManager.LoadScene(currentSceneIndex + 1);
+        }
+
         private void UpdateCounterUI()
         {
             if (counterText != null)
@@ -49,10 +59,15 @@ namespace AdventureGame
 
         private void Win()
         {
-            Debug.Log("You Win!");
+            GameEnded = true;
+
             if (winPanel != null)
                 winPanel.SetActive(true);
-            // bisa tambahkan efek, suara, atau transisi ke level berikutnya
+
+            Time.timeScale = 0;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
+
     }
 }

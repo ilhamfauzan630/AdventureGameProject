@@ -30,19 +30,21 @@ namespace AdventureGame
 
         void TogglePause()
         {
+            if (GameManager.GameEnded) return;
+
             isPaused = !isPaused;
 
             pauseMenu.SetActive(isPaused);
 
             if (isPaused)
             {
-                Time.timeScale = 0;   // freeze game
+                Time.timeScale = 0;
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
             }
             else
             {
-                Time.timeScale = 1;   // resume game
+                Time.timeScale = 1;
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
             }
