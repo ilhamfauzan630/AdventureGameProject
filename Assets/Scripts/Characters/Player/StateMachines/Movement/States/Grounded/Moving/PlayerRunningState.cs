@@ -6,9 +6,11 @@ namespace AdventureGame
     public class PlayerRunningState : PlayerMovingState
     {
         private float startTime;
+        public PlayerAudio playerAudio;
 
         public PlayerRunningState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
+            playerAudio = stateMachine.Player.GetComponentInChildren<PlayerAudio>();
         }
 
         public override void Enter()
@@ -17,6 +19,7 @@ namespace AdventureGame
 
             base.Enter();
 
+            playerAudio.StartRun();
             StartAnimation(stateMachine.Player.AnimationData.RunParameterHash);
 
             stateMachine.ReusableData.CurrentJumpForce = airborneData.JumpData.MediumForce;
@@ -27,6 +30,8 @@ namespace AdventureGame
         public override void Exit()
         {
             base.Exit();
+
+            playerAudio.StopRun();
 
             StopAnimation(stateMachine.Player.AnimationData.RunParameterHash);
         }
@@ -50,6 +55,7 @@ namespace AdventureGame
 
         private void StopRunning()
         {
+            playerAudio.StopRun();
             if (stateMachine.ReusableData.MovementInput == Vector2.zero)
             {
                 stateMachine.ChangeState(stateMachine.IdlingState);

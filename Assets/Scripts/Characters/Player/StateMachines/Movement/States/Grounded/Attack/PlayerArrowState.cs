@@ -8,12 +8,13 @@ namespace AdventureGame
 
         public PlayerArrowState(PlayerMovementStateMachine stateMachine) : base(stateMachine)
         {
+            playerAudio = stateMachine.Player.GetComponentInChildren<PlayerAudio>();
         }
 
         public override void Enter()
         {
             base.Enter();
-
+            
             Debug.Log(">> Enter Arrow State");
             StartAnimation(stateMachine.Player.AnimationData.ShootParameterHash);
             hasShot = false;
@@ -28,6 +29,7 @@ namespace AdventureGame
 
             if (stateMachine.Player.Bow != null)
             {
+                playerAudio.PlayShoot();
                 stateMachine.Player.Bow.ShootAutoAim();
                 stateMachine.ChangeState(stateMachine.AttackState);
             }

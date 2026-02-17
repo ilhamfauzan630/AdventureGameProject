@@ -20,6 +20,8 @@ namespace AdventureGame
         private Rigidbody rb;
         private Collider arrowCollider;
 
+        private PlayerAudio playerAudio;
+
         private int enemyLayer;
 
         [HideInInspector] public Collider shooterCollider;
@@ -34,6 +36,7 @@ namespace AdventureGame
             rb.useGravity = false;
             arrowCollider = GetComponent<Collider>();
             enemyLayer = LayerMask.NameToLayer("Enemy");
+            playerAudio = FindObjectOfType<PlayerAudio>();
         }
 
         private void Start()
@@ -132,6 +135,7 @@ namespace AdventureGame
             {
                 if (explosionPrefab != null)
                 {
+                    playerAudio.PlayExplode();
                     var explosion = Instantiate(explosionPrefab, other.transform.position, Quaternion.identity);
                     Destroy(explosion, 1.5f);
                 }

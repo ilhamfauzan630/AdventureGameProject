@@ -8,13 +8,18 @@ namespace AdventureGame
         private float attackTimer;
         private readonly float maxAttackDuration = 2f; // ⏱️ Waktu maksimum dalam Attack State
 
-        public PlayerAttackState(PlayerMovementStateMachine stateMachine) : base(stateMachine) { }
+        public PlayerAudio playerAudio;
+        public PlayerAttackState(PlayerMovementStateMachine stateMachine) : base(stateMachine)
+        {
+            playerAudio = stateMachine.Player.GetComponentInChildren<PlayerAudio>();
+        }
 
         public override void Enter()
         {
             base.Enter();
             Debug.Log(">> Enter Attack State");
 
+            playerAudio.StartRunFast();
             StartAnimation(stateMachine.Player.AnimationData.AttackingParameterHash);
 
             stateMachine.ReusableData.MovementSpeedModifier = 3f;
@@ -42,6 +47,11 @@ namespace AdventureGame
         {
             base.Exit();
             Debug.Log("<< Exit Attack State");
+            
+            if (stateMachine.CurrentState != stateMachine.ArrowState)
+            {
+                playerAudio.StopRunFast();
+            }
 
             StopAnimation(stateMachine.Player.AnimationData.AttackingParameterHash);
         }
@@ -60,7 +70,6 @@ namespace AdventureGame
 
         private void OnShootStarted(InputAction.CallbackContext context)
         {
-            // Klik kiri mouse → masuk ke ArrowState
             stateMachine.ChangeState(stateMachine.ArrowState);
         }
     }

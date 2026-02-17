@@ -46,10 +46,28 @@ namespace AdventureGame
 
         public void NextStage()
         {
-            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+            Time.timeScale = 1f;
 
-            SceneManager.LoadScene(currentSceneIndex + 1);
+            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+            int nextSceneIndex = currentSceneIndex + 1;
+
+            // cek apakah masih ada scene berikutnya
+            if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
+            {
+                SceneManager.LoadScene(nextSceneIndex);
+            }
+            else
+            {
+                Debug.Log("Sudah stage terakhir!");
+
+                // opsi: tampilkan panel tamat game
+                if (winPanel != null)
+                {
+                    winPanel.SetActive(true);
+                }
+            }
         }
+
 
         private void UpdateCounterUI()
         {

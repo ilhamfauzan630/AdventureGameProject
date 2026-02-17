@@ -22,8 +22,8 @@ namespace AdventureGame
 
         [Header("Auto Aim")]
         public float autoAimRadius = 12f;
-        public LayerMask targetLayer; // AimTarget
-        public LayerMask enemyLayer;  // Enemy (fallback)
+        public LayerMask targetLayer; 
+        public LayerMask enemyLayer;  
 
         [Header("Lock Icon")]
         public GameObject lockIconPrefab;
