@@ -101412,6 +101412,7 @@ MonoBehaviour:
   audioSource: {fileID: 5518329574882485517}
   shootClip: {fileID: 8300000, guid: d5a8bc05d3a857d489083be9ef50a3c7, type: 3}
   runClip: {fileID: 8300000, guid: 84ea10a0b26629343a0e6b9dd3347968, type: 3}
+  runFastClip: {fileID: 8300000, guid: b4ec05a7d5cb26a4582f804a9aa10230, type: 3}
   explodeClip: {fileID: 8300000, guid: 1496fd0e0858b84459a76c6bca3f4331, type: 3}
 --- !u!4 &6085924509175467506
 Transform:

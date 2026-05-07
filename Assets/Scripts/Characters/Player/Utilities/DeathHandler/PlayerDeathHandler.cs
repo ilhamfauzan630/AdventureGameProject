@@ -9,6 +9,7 @@ namespace AdventureGame
         private PlayerHealthBridge healthBridge;
 
         private bool hasDied = false;
+        public GameObject winPanel; 
 
         private void Awake()
         {
@@ -19,6 +20,12 @@ namespace AdventureGame
         private void OnEnable()
         {
             healthBridge.OnDeath += OnPlayerDeath;
+        }
+
+        private void Start()
+        {
+            if (winPanel != null)
+                winPanel.SetActive(false);
         }
 
         private void OnDisable()
@@ -34,12 +41,15 @@ namespace AdventureGame
             Debug.Log("💀 PlayerDeathHandler: Player mati!");
             animator.SetTrigger("Die");
 
-            // TODO: nanti tampilkan Game Over UI
-            // GameOverUI.Instance.Show();
+            if (winPanel != null)
+                winPanel.SetActive(true);
 
-            var input = GetComponent<PlayerInput>();
-            if (input != null)
-                input.enabled = false;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+
+                var input = GetComponent<PlayerInput>();
+                if (input != null)
+                    input.enabled = false;
         }
     }
 }
