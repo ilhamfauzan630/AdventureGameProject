@@ -17,13 +17,15 @@ namespace AdventureGame
         public TextMeshProUGUI  counterText;
         public GameObject winPanel; // panel win (bisa popup atau text besar)
 
-        public static bool GameEnded = false;
+        public bool GameEnded { get; private set; }
 
         private void Awake()
         {
-            // pastikan hanya satu instance
+            // pastikan hanya satu instance            
             if (Instance == null) Instance = this;
             else Destroy(gameObject);
+
+            GameEnded = false;
         }
 
         private void Start()

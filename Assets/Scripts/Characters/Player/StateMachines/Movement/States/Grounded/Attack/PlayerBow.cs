@@ -158,7 +158,7 @@ namespace AdventureGame
         private void UpdateAmmoText()
         {
             if (ammoText != null)
-                ammoText.text = $"Arrows: {currentArrows} / {maxArrows}";
+                ammoText.text = $"{currentArrows}/{maxArrows}";
         }
 
         private void ShowNoAmmoText()

@@ -30,7 +30,7 @@ namespace AdventureGame
 
         void TogglePause()
         {
-            if (GameManager.GameEnded) return;
+            if (GameManager.Instance.GameEnded) return;
 
             isPaused = !isPaused;
 
