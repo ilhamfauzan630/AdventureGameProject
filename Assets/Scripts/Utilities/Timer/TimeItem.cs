@@ -7,15 +7,23 @@ namespace AdventureGame
         [Header("Time Bonus")]
         public float extraTime = 10f;
 
+        [HideInInspector]
+        public TimeItemSpawner spawner;
+
         private void OnTriggerEnter(Collider other)
         {
-            // cek apakah yang menyentuh player
             if (other.CompareTag("Player"))
             {
-                // tambah waktu
+                // Tambah waktu
                 CountdownTimer.Instance.AddTime(extraTime);
 
-                // hancurkan item
+                // Beri tahu spawner
+                if (spawner != null)
+                {
+                    spawner.ItemCollected();
+                }
+
+                // Hancurkan item
                 Destroy(gameObject);
             }
         }

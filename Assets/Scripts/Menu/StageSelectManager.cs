@@ -10,10 +10,22 @@ namespace AdventureGame
         [System.Serializable]
         public class StageInfo
         {
-            public string stageName;      
-            public string actTitle;      
-            [TextArea] public string description;
-            public Sprite stageImage;
+            public string stageName;
+            public string actTitle;
+
+            [TextArea]
+            public string description;
+
+            [Header("Unlock")]
+            public int stageID;
+
+            [Header("UI")]
+            public Button stageButton;
+            public Image stageImage;
+
+            [Header("Sprites")]
+            public Sprite unlockedSprite;
+            public Sprite lockedSprite;
         }
 
         [Header("Stage Data")]
@@ -21,7 +33,7 @@ namespace AdventureGame
 
         [Header("UI References")]
         public GameObject stageInfoPanel;     
-        public Image stageImageUI;
+        // public Image stageImageUI;
         public TextMeshProUGUI titleText;  
         public TextMeshProUGUI descText; 
         public Button playButton;  
@@ -41,6 +53,29 @@ namespace AdventureGame
         {
             if (stageInfoPanel != null)
                 stageInfoPanel.SetActive(false);
+
+            SetupStages();
+        }
+
+        void SetupStages()
+        {
+            int unlockedStage = PlayerPrefs.GetInt("UnlockedStage", 1);
+
+            foreach (StageInfo stage in stages)
+            {
+                bool isUnlocked = unlockedStage >= stage.stageID;
+
+                // Tombol bisa diklik atau tidak
+                if (stage.stageButton != null)
+                    stage.stageButton.interactable = isUnlocked;
+
+                // Ganti gambar
+                if (stage.stageImage != null)
+                {
+                    stage.stageImage.sprite =
+                        isUnlocked ? stage.unlockedSprite : stage.lockedSprite;
+                }
+            }
         }
 
         public void ShowStageInfo(int index)
@@ -53,18 +88,17 @@ namespace AdventureGame
 
             StageInfo stage = stages[index];
 
+            int unlockedStage = PlayerPrefs.GetInt("UnlockedStage", 1);
+
+            // Cek lock
+            if (unlockedStage < stage.stageID)
+            {
+                Debug.Log("Stage masih terkunci!");
+                return;
+            }
+
             titleText.text = stage.actTitle;
             descText.text = stage.description;
-
-            if (stage.stageImage != null && stageImageUI != null)
-            {
-                stageImageUI.sprite = stage.stageImage;
-                stageImageUI.gameObject.SetActive(true);
-            }
-            else if (stageImageUI != null)
-            {
-                stageImageUI.gameObject.SetActive(false);
-            }
 
             currentStageScene = stage.stageName;
 

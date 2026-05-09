@@ -162,7 +162,11 @@ MonoBehaviour:
       ketepatan, mempelajari dasar-dasar kemampuan yang kelak menentukan nasib seluruh
       pulau.\n\nMisi:\nBantu Arka menyelesaikan latihan panah pertama dan buka gerbang
       perjalanan menuju dunia yang lebih luas."
-    stageImage: {fileID: 21300000, guid: d6d9ca6a26dc30241b30502698f1c833, type: 3}
+    stageID: 1
+    stageButton: {fileID: 2116146068}
+    stageImage: {fileID: 2116146069}
+    unlockedSprite: {fileID: 21300000, guid: b7d1c29ea2e65a54d97a0e131d905a5d, type: 3}
+    lockedSprite: {fileID: 21300000, guid: e45f9ef5872bc5546b79759e93d76023, type: 3}
   - stageName: World2-PulauRimba
     actTitle: "Pulau Rimba \u2014 Bisikan Roh Hutan"
     description: "Setelah meninggalkan desa, Arka tiba di Pulau Rimba \u2014 hutan
@@ -171,7 +175,11 @@ MonoBehaviour:
       ini mulai tidak stabil, seolah meminta bantuan.\nHanya mereka yang mampu membaca
       urutan cahaya dan keseimbangan yang dapat menenangkan pergerakan roh.\n\nMisi:\nPecahkan
       teka-teki Totem Roh dan buktikan bahwa Arka layak disebut Penjaga Alam."
-    stageImage: {fileID: 21300000, guid: dd9a798397cd3e44286944ce5d200666, type: 3}
+    stageID: 2
+    stageButton: {fileID: 1407379624}
+    stageImage: {fileID: 1407379625}
+    unlockedSprite: {fileID: 21300000, guid: b7d1c29ea2e65a54d97a0e131d905a5d, type: 3}
+    lockedSprite: {fileID: 21300000, guid: e45f9ef5872bc5546b79759e93d76023, type: 3}
   - stageName: World3-PulauPenjaga
     actTitle: "Pulau Penjaga \u2014 Arca Terbangun"
     description: "Perjalanan Arka membawanya ke pulau terakhir \u2014 puncak batu
@@ -181,9 +189,12 @@ MonoBehaviour:
       dan hanya keberanian sejati yang dapat mengakhiri kekacauan yang akan bangkit.\n\nMisi:\nNyalakan
       empat obor batu menggunakan panah cahaya dan hadapi Arca Penjaga dalam pertarungan
       klimaks."
-    stageImage: {fileID: 21300000, guid: ea5aeace3d990a4498020d3d79d2b53d, type: 3}
+    stageID: 3
+    stageButton: {fileID: 324736777}
+    stageImage: {fileID: 324736778}
+    unlockedSprite: {fileID: 21300000, guid: b7d1c29ea2e65a54d97a0e131d905a5d, type: 3}
+    lockedSprite: {fileID: 21300000, guid: e45f9ef5872bc5546b79759e93d76023, type: 3}
   stageInfoPanel: {fileID: 1135396642}
-  stageImageUI: {fileID: 476339182}
   titleText: {fileID: 993670454}
   descText: {fileID: 1266143887}
   playButton: {fileID: 1488737147}
@@ -745,7 +756,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d6d9ca6a26dc30241b30502698f1c833, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

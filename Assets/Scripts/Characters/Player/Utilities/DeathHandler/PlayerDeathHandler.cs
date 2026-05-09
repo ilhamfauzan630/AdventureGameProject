@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace AdventureGame
@@ -9,7 +10,7 @@ namespace AdventureGame
         private PlayerHealthBridge healthBridge;
 
         private bool hasDied = false;
-        public GameObject winPanel; 
+        public GameObject winPanel;
 
         private void Awake()
         {
@@ -39,17 +40,28 @@ namespace AdventureGame
             hasDied = true;
 
             Debug.Log("💀 PlayerDeathHandler: Player mati!");
+
             animator.SetTrigger("Die");
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
+            var input = GetComponent<PlayerInput>();
+            if (input != null)
+                input.enabled = false;
+
+            StartCoroutine(HandleDeath());
+        }
+
+        private IEnumerator HandleDeath()
+        {
+            yield return new WaitForSeconds(1.5f);
+
+            // freeze game
+            Time.timeScale = 0f;
 
             if (winPanel != null)
                 winPanel.SetActive(true);
-
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-
-                var input = GetComponent<PlayerInput>();
-                if (input != null)
-                    input.enabled = false;
         }
     }
 }

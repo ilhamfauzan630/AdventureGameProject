@@ -8,11 +8,13 @@ namespace AdventureGame
         public static GameManager Instance;
 
         [Header("Target Settings")]
-        public int totalTargets = 10;
         private int hitCount = 0;
 
         [Header("UI")]
         public TextMeshProUGUI counterText;
+
+        // getter score
+        public int HitCount => hitCount;
 
         private void Awake()
         {
@@ -37,7 +39,7 @@ namespace AdventureGame
         {
             if (counterText != null)
             {
-                counterText.text = $"{hitCount}/{totalTargets}";
+                counterText.text = $"{hitCount}";
             }
         }
     }

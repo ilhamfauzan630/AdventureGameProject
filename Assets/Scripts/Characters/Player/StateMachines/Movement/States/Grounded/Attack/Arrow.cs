@@ -136,11 +136,28 @@ namespace AdventureGame
                 if (explosionPrefab != null)
                 {
                     playerAudio.PlayExplode();
-                    var explosion = Instantiate(explosionPrefab, other.transform.position, Quaternion.identity);
+
+                    var explosion = Instantiate(
+                        explosionPrefab,
+                        other.transform.position,
+                        Quaternion.identity
+                    );
+
                     Destroy(explosion, 1.5f);
                 }
 
-                Destroy(other.gameObject);
+                // Ambil script Spirit
+                Spirit spirit = other.GetComponent<Spirit>();
+
+                // Jika ada script Spirit
+                if (spirit != null)
+                {
+                    spirit.DestroySpirit();
+                }
+                else
+                {
+                    Destroy(other.gameObject);
+                }
 
                 if (GameManager.Instance != null)
                     GameManager.Instance.RegisterHit();

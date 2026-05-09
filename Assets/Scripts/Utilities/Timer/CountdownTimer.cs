@@ -15,6 +15,16 @@ namespace AdventureGame
         public TextMeshProUGUI timerText;
         public GameObject winPanel;
 
+        [Header("Result UI")]
+        public TextMeshProUGUI scoreText;
+        public TextMeshProUGUI timeText;
+        public TextMeshProUGUI totalScoreText;
+
+        [Header("Stage")]
+        public int nextStageToUnlock = 2;
+
+        private int collectedBonusTime = 0;
+
         public bool GameEnded { get; private set; }
 
         private bool timerRunning = true;
@@ -78,6 +88,38 @@ namespace AdventureGame
 
             Debug.Log("Waktu habis!");
 
+            // ambil data
+            int hitScore = GameManager.Instance.HitCount;
+            int timeBonus = collectedBonusTime;
+
+            // contoh total score
+            int totalScore = (hitScore * 100) + (timeBonus * 10);
+
+            // update UI result
+            if (scoreText != null)
+                scoreText.text = "Target Hit : " + hitScore;
+
+            if (timeText != null)
+                timeText.text = "Time Bonus : " + timeBonus;
+
+            if (totalScoreText != null)
+                totalScoreText.text = "Total Score : " + totalScore;
+
+            // =========================
+            // UNLOCK NEXT STAGE
+            // =========================
+
+            int currentUnlocked = PlayerPrefs.GetInt("UnlockedStage", 1);
+
+            if (nextStageToUnlock > currentUnlocked)
+            {
+                PlayerPrefs.SetInt("UnlockedStage", nextStageToUnlock);
+                PlayerPrefs.Save();
+
+                Debug.Log("Stage baru terbuka: " + nextStageToUnlock);
+            }
+
+            // tampilkan panel
             if (winPanel != null)
                 winPanel.SetActive(true);
 
@@ -91,29 +133,16 @@ namespace AdventureGame
         {
             Time.timeScale = 1f;
 
-            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-            int nextSceneIndex = currentSceneIndex + 1;
-
-            // cek apakah masih ada scene berikutnya
-            if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
-            {
-                SceneManager.LoadScene(nextSceneIndex);
-            }
-            else
-            {
-                Debug.Log("Sudah stage terakhir!");
-
-                if (winPanel != null)
-                {
-                    winPanel.SetActive(true);
-                }
-            }
+            SceneManager.LoadScene("StageSelect");
         }
 
         // fungsi tambah waktu
         public void AddTime(float extraTime)
         {
             timeLeft += extraTime;
+
+            // simpan total bonus yang dikumpulkan
+            collectedBonusTime += Mathf.FloorToInt(extraTime);
 
             UpdateTimerUI();
         }
