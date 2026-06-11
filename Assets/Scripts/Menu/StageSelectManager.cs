@@ -37,6 +37,9 @@ namespace AdventureGame
         public TextMeshProUGUI titleText;  
         public TextMeshProUGUI descText; 
         public Button playButton;  
+
+        [Header("Ending Popup")]
+        public GameObject endingPopup;
         private string currentStageScene;
 
         public void LoadStage(string sceneName)
@@ -55,6 +58,22 @@ namespace AdventureGame
                 stageInfoPanel.SetActive(false);
 
             SetupStages();
+
+            // popup ending
+            if (endingPopup != null)
+            {
+                endingPopup.SetActive(false);
+
+                // cek apakah game tamat
+                if (PlayerPrefs.GetInt("GameFinished", 0) == 1)
+                {
+                    endingPopup.SetActive(true);
+
+                    // reset agar popup tidak muncul terus
+                    PlayerPrefs.SetInt("GameFinished", 0);
+                    PlayerPrefs.Save();
+                }
+            }
         }
 
         void SetupStages()

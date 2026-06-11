@@ -35,7 +35,6 @@ namespace AdventureGame
             // Jalanin timer
             attackTimer += Time.deltaTime;
 
-            // Jika waktu Attack State habis, otomatis balik ke RunningState
             if (attackTimer >= maxAttackDuration)
             {
                 Debug.Log("[AttackState] Timer habis → Kembali ke RunningState");

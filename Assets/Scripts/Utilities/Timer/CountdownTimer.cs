@@ -23,6 +23,9 @@ namespace AdventureGame
         [Header("Stage")]
         public int nextStageToUnlock = 2;
 
+        [Header("Final Stage")]
+        public bool isFinalStage = false;
+
         private int collectedBonusTime = 0;
 
         public bool GameEnded { get; private set; }
@@ -123,6 +126,13 @@ namespace AdventureGame
             if (winPanel != null)
                 winPanel.SetActive(true);
 
+            // jika stage terakhir selesai
+            if (isFinalStage)
+            {
+                PlayerPrefs.SetInt("GameFinished", 1);
+                PlayerPrefs.Save();
+            }
+            
             Time.timeScale = 0f;
 
             Cursor.lockState = CursorLockMode.None;
