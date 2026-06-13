@@ -1367,7 +1367,7 @@ Transform:
   m_GameObject: {fileID: 567000320}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 101.52, y: 4.26, z: 65.8}
+  m_LocalPosition: {x: 101.52, y: 5.34, z: 65.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13228,6 +13228,7 @@ MonoBehaviour:
   timeText: {fileID: 620916174}
   totalScoreText: {fileID: 1172884903}
   nextStageToUnlock: 2
+  isFinalStage: 0
 --- !u!137 &7657895015456601325
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0

@@ -10,6 +10,9 @@ namespace AdventureGame
         [HideInInspector]
         public TimeItemSpawner spawner;
 
+        [HideInInspector]
+        public Transform spawnPoint;
+
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Player"))
@@ -20,7 +23,7 @@ namespace AdventureGame
                 // Beri tahu spawner
                 if (spawner != null)
                 {
-                    spawner.ItemCollected();
+                    spawner.ItemCollected(spawnPoint);
                 }
 
                 // Hancurkan item

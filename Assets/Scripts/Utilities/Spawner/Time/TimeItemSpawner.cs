@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AdventureGame
@@ -16,10 +17,15 @@ namespace AdventureGame
 
         private int currentItems;
 
+        private List<Transform> availableSpawnPoints;
+
         private void Start()
         {
-            // Spawn awal
-            for (int i = 0; i < maxItems; i++)
+            availableSpawnPoints = new List<Transform>(spawnPoints);
+
+            int spawnCount = Mathf.Min(maxItems, spawnPoints.Length);
+
+            for (int i = 0; i < spawnCount; i++)
             {
                 SpawnItem();
             }
@@ -27,33 +33,43 @@ namespace AdventureGame
 
         public void SpawnItem()
         {
-            // Cegah melebihi batas
             if (currentItems >= maxItems)
                 return;
 
-            // Pilih spawn point random
-            int randomIndex = Random.Range(0, spawnPoints.Length);
+            if (availableSpawnPoints.Count == 0)
+                return;
 
-            Transform spawnPoint = spawnPoints[randomIndex];
+            int randomIndex = Random.Range(0, availableSpawnPoints.Count);
 
-            // Spawn item
+            Transform selectedPoint =
+                availableSpawnPoints[randomIndex];
+
+            availableSpawnPoints.RemoveAt(randomIndex);
+
             GameObject item = Instantiate(
                 timeItemPrefab,
-                spawnPoint.position,
-                spawnPoint.rotation
+                selectedPoint.position,
+                selectedPoint.rotation
             );
 
-            // Ambil script item
             TimeItem timeItem = item.GetComponent<TimeItem>();
 
-            // Kirim referensi spawner
-            timeItem.spawner = this;
+            if (timeItem != null)
+            {
+                timeItem.spawner = this;
+                timeItem.spawnPoint = selectedPoint;
+            }
 
             currentItems++;
         }
 
-        public void ItemCollected()
+        public void ItemCollected(Transform spawnPoint)
         {
+            if (!availableSpawnPoints.Contains(spawnPoint))
+            {
+                availableSpawnPoints.Add(spawnPoint);
+            }
+
             currentItems--;
 
             Invoke(nameof(SpawnItem), respawnDelay);
