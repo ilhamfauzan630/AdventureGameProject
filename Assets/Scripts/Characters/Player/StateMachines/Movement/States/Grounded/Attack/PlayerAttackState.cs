@@ -6,10 +6,12 @@ namespace AdventureGame
     public class PlayerAttackState : PlayerGroundedState
     {
         private float attackTimer;
-        private readonly float maxAttackDuration = 2f; // ⏱️ Waktu maksimum dalam Attack State
+        private readonly float maxAttackDuration = 2f;
 
-        public PlayerAudio playerAudio;
-        public PlayerAttackState(PlayerMovementStateMachine stateMachine) : base(stateMachine)
+        protected PlayerAudio playerAudio;
+
+        public PlayerAttackState(PlayerMovementStateMachine stateMachine)
+            : base(stateMachine)
         {
             playerAudio = stateMachine.Player.GetComponentInChildren<PlayerAudio>();
         }
@@ -17,14 +19,15 @@ namespace AdventureGame
         public override void Enter()
         {
             base.Enter();
+
             Debug.Log(">> Enter Attack State");
 
             playerAudio.StartRunFast();
+
             StartAnimation(stateMachine.Player.AnimationData.AttackingParameterHash);
 
             stateMachine.ReusableData.MovementSpeedModifier = 3f;
 
-            // Reset timer setiap masuk Attack State
             attackTimer = 0f;
         }
 
@@ -32,7 +35,6 @@ namespace AdventureGame
         {
             base.Update();
 
-            // Jalanin timer
             attackTimer += Time.deltaTime;
 
             if (attackTimer >= maxAttackDuration)
@@ -45,12 +47,12 @@ namespace AdventureGame
         public override void Exit()
         {
             base.Exit();
+
             Debug.Log("<< Exit Attack State");
-            
-            if (stateMachine.CurrentState != stateMachine.ArrowState)
-            {
-                playerAudio.StopRunFast();
-            }
+
+            // Jangan StopRunFast di sini
+            // supaya saat pindah ke ArrowState
+            // suara tidak terputus.
 
             StopAnimation(stateMachine.Player.AnimationData.AttackingParameterHash);
         }
@@ -58,12 +60,14 @@ namespace AdventureGame
         protected override void AddInputActionsCallbacks()
         {
             base.AddInputActionsCallbacks();
+
             stateMachine.Player.Input.PlayerActions.Fire.started += OnShootStarted;
         }
 
         protected override void RemoveInputActionsCallbacks()
         {
             base.RemoveInputActionsCallbacks();
+
             stateMachine.Player.Input.PlayerActions.Fire.started -= OnShootStarted;
         }
 

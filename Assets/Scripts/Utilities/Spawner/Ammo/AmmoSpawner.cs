@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AdventureGame
@@ -16,10 +17,18 @@ namespace AdventureGame
 
         private int currentAmmoItems;
 
+        private List<Transform> availableSpawnPoints;
+
         private void Start()
         {
-            // Spawn awal
-            for (int i = 0; i < maxAmmoItems; i++)
+            availableSpawnPoints = new List<Transform>(spawnPoints);
+
+            int spawnCount = Mathf.Min(
+                maxAmmoItems,
+                spawnPoints.Length
+            );
+
+            for (int i = 0; i < spawnCount; i++)
             {
                 SpawnAmmo();
             }
@@ -27,33 +36,47 @@ namespace AdventureGame
 
         public void SpawnAmmo()
         {
-            // Batasi jumlah ammo aktif
             if (currentAmmoItems >= maxAmmoItems)
                 return;
 
-            // Ambil spawn point random
-            int randomIndex = Random.Range(0, spawnPoints.Length);
+            if (availableSpawnPoints.Count == 0)
+                return;
 
-            Transform spawnPoint = spawnPoints[randomIndex];
-
-            // Spawn ammo
-            GameObject ammo = Instantiate(
-                ammoPrefab,
-                spawnPoint.position,
-                spawnPoint.rotation
+            int randomIndex = Random.Range(
+                0,
+                availableSpawnPoints.Count
             );
 
-            // Ambil script pickup
-            AmmoPickup pickup = ammo.GetComponent<AmmoPickup>();
+            Transform selectedPoint =
+                availableSpawnPoints[randomIndex];
 
-            // Kirim referensi spawner
-            pickup.spawner = this;
+            availableSpawnPoints.RemoveAt(randomIndex);
+
+            GameObject ammo = Instantiate(
+                ammoPrefab,
+                selectedPoint.position,
+                selectedPoint.rotation
+            );
+
+            AmmoPickup pickup =
+                ammo.GetComponent<AmmoPickup>();
+
+            if (pickup != null)
+            {
+                pickup.spawner = this;
+                pickup.spawnPoint = selectedPoint;
+            }
 
             currentAmmoItems++;
         }
 
-        public void AmmoCollected()
+        public void AmmoCollected(Transform spawnPoint)
         {
+            if (!availableSpawnPoints.Contains(spawnPoint))
+            {
+                availableSpawnPoints.Add(spawnPoint);
+            }
+
             currentAmmoItems--;
 
             Invoke(nameof(SpawnAmmo), respawnDelay);

@@ -12,9 +12,7 @@ namespace AdventureGame
         public AudioClip runFastClip;
         public AudioClip explodeClip;
 
-        private bool isRunning = false;
-
-        void Start()
+        private void Start()
         {
             if (audioSource == null)
                 audioSource = GetComponent<AudioSource>();
@@ -32,38 +30,50 @@ namespace AdventureGame
 
         public void StartRun()
         {
-            if (isRunning) return;
+            // Jika sudah memainkan runClip normal,
+            // tidak perlu melakukan apa-apa.
+            if (audioSource.isPlaying &&
+                audioSource.clip == runClip &&
+                audioSource.pitch == 1f)
+            {
+                return;
+            }
 
             audioSource.clip = runClip;
             audioSource.loop = true;
-            audioSource.Play();
-            isRunning = true;
+            audioSource.pitch = 1f;
+
+            if (!audioSource.isPlaying)
+                audioSource.Play();
         }
 
         public void StopRun()
         {
-            if (!isRunning) return;
-
             audioSource.Stop();
-            isRunning = false;
         }
 
         public void StartRunFast()
         {
-            if (isRunning) return;
+            // Jika sudah memainkan runFastClip,
+            // jangan restart audionya.
+            if (audioSource.isPlaying &&
+                audioSource.clip == runFastClip)
+            {
+                return;
+            }
 
             audioSource.clip = runFastClip;
             audioSource.loop = true;
-            audioSource.Play();
-            isRunning = true;
+            audioSource.pitch = 1.4f;
+
+            if (!audioSource.isPlaying)
+                audioSource.Play();
         }
 
         public void StopRunFast()
         {
-            if (!isRunning) return;
-
             audioSource.Stop();
-            isRunning = false;
+            audioSource.pitch = 1f;
         }
     }
 }

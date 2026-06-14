@@ -9,6 +9,9 @@ namespace AdventureGame
         [HideInInspector]
         public AmmoSpawner spawner;
 
+        [HideInInspector]
+        public Transform spawnPoint;
+
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Player"))
@@ -17,7 +20,6 @@ namespace AdventureGame
 
                 if (bow != null)
                 {
-                    // Tambah ammo
                     bow.currentArrows += ammoAmount;
 
                     bow.currentArrows = Mathf.Clamp(
@@ -31,13 +33,11 @@ namespace AdventureGame
                         SendMessageOptions.DontRequireReceiver
                     );
 
-                    // Beri tahu spawner
                     if (spawner != null)
                     {
-                        spawner.AmmoCollected();
+                        spawner.AmmoCollected(spawnPoint);
                     }
 
-                    // Hancurkan item
                     Destroy(gameObject);
                 }
             }
