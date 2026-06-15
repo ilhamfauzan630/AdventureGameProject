@@ -35,6 +35,12 @@ namespace AdventureGame
             UpdateCounterUI();
         }
 
+        public void AddPoints(int amount)
+        {
+            hitCount += amount;
+            UpdateCounterUI();
+        }
+
         private void UpdateCounterUI()
         {
             if (counterText != null)

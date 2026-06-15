@@ -13,6 +13,7 @@ namespace AdventureGame
         public TextMeshProUGUI ammoText;
         public TextMeshProUGUI noAmmoText;
         public float noAmmoDisplayTime = 1.5f;
+
         private float noAmmoTimer;
 
         [Header("Arrow")]
@@ -22,8 +23,8 @@ namespace AdventureGame
 
         [Header("Auto Aim")]
         public float autoAimRadius = 12f;
-        public LayerMask targetLayer; 
-        public LayerMask enemyLayer;  
+        public LayerMask targetLayer;
+        public LayerMask enemyLayer;
 
         [Header("Lock Icon")]
         public GameObject lockIconPrefab;
@@ -35,6 +36,7 @@ namespace AdventureGame
         private void Start()
         {
             UpdateAmmoText();
+
             if (noAmmoText != null)
                 noAmmoText.gameObject.SetActive(false);
         }
@@ -48,6 +50,7 @@ namespace AdventureGame
         // ======================
         // SHOOT
         // ======================
+
         public void ShootAutoAim()
         {
             if (currentArrows <= 0)
@@ -59,9 +62,10 @@ namespace AdventureGame
             currentArrows--;
             UpdateAmmoText();
 
-            Transform aimTarget = GetFinalAimTarget();
+            Transform aimTarget = GetNearestTarget();
 
-            Vector3 direction = aimTarget != null
+            Vector3 direction =
+                aimTarget != null
                 ? (aimTarget.position - arrowSpawnPoint.position).normalized
                 : transform.forward;
 
@@ -72,24 +76,53 @@ namespace AdventureGame
             );
 
             Rigidbody rb = arrow.GetComponent<Rigidbody>();
+
             if (rb != null)
             {
                 rb.velocity = direction * arrowSpeed;
             }
+
+            Arrow arrowScript = arrow.GetComponent<Arrow>();
+
+            if (arrowScript != null)
+            {
+                arrowScript.target = aimTarget;
+            }
         }
 
         // ======================
-        // AIM LOGIC
+        // TARGET SEARCH
         // ======================
-        private Transform GetFinalAimTarget()
-        {
-            // PRIORITAS 1 → Target
-            Transform target = FindClosestByLayer(targetLayer);
-            if (target != null)
-                return target;
 
-            // PRIORITAS 2 → Enemy
-            return FindClosestByLayer(enemyLayer);
+        private Transform GetNearestTarget()
+        {
+            Transform nearestTarget =
+                FindClosestByLayer(targetLayer);
+
+            Transform nearestEnemy =
+                FindClosestByLayer(enemyLayer);
+
+            if (nearestTarget == null)
+                return nearestEnemy;
+
+            if (nearestEnemy == null)
+                return nearestTarget;
+
+            float targetDistance =
+                Vector3.Distance(
+                    transform.position,
+                    nearestTarget.position
+                );
+
+            float enemyDistance =
+                Vector3.Distance(
+                    transform.position,
+                    nearestEnemy.position
+                );
+
+            return targetDistance < enemyDistance
+                ? nearestTarget
+                : nearestEnemy;
         }
 
         private Transform FindClosestByLayer(LayerMask layer)
@@ -101,14 +134,19 @@ namespace AdventureGame
             );
 
             Transform closest = null;
-            float minDist = Mathf.Infinity;
+            float closestDistance = Mathf.Infinity;
 
-            foreach (var hit in hits)
+            foreach (Collider hit in hits)
             {
-                float dist = Vector3.Distance(transform.position, hit.transform.position);
-                if (dist < minDist)
+                float distance =
+                    Vector3.Distance(
+                        transform.position,
+                        hit.transform.position
+                    );
+
+                if (distance < closestDistance)
                 {
-                    minDist = dist;
+                    closestDistance = distance;
                     closest = hit.transform;
                 }
             }
@@ -117,11 +155,14 @@ namespace AdventureGame
         }
 
         // ======================
-        // LOCK ICON (TARGET ONLY)
+        // LOCK ICON
+        // Tetap hanya untuk Target
         // ======================
+
         private void UpdateLockIcon()
         {
-            Transform target = FindClosestByLayer(targetLayer);
+            Transform target =
+                FindClosestByLayer(targetLayer);
 
             if (target == null)
             {
@@ -132,6 +173,7 @@ namespace AdventureGame
             if (target != currentLockTarget)
             {
                 ClearLockIcon();
+
                 currentLockTarget = target;
 
                 currentLockIcon = Instantiate(
@@ -146,7 +188,9 @@ namespace AdventureGame
         private void ClearLockIcon()
         {
             if (currentLockIcon != null)
+            {
                 Destroy(currentLockIcon);
+            }
 
             currentLockIcon = null;
             currentLockTarget = null;
@@ -155,28 +199,34 @@ namespace AdventureGame
         // ======================
         // UI
         // ======================
+
         private void UpdateAmmoText()
         {
             if (ammoText != null)
-                ammoText.text = $"{currentArrows}/{maxArrows}";
+            {
+                ammoText.text =
+                    $"{currentArrows}/{maxArrows}";
+            }
         }
 
         private void ShowNoAmmoText()
         {
-            if (noAmmoText != null)
-            {
-                noAmmoText.gameObject.SetActive(true);
-                noAmmoTimer = noAmmoDisplayTime;
-            }
+            if (noAmmoText == null)
+                return;
+
+            noAmmoText.gameObject.SetActive(true);
+            noAmmoTimer = noAmmoDisplayTime;
         }
 
         private void HandleNoAmmoText()
         {
-            if (noAmmoText == null) return;
+            if (noAmmoText == null)
+                return;
 
             if (noAmmoTimer > 0)
             {
                 noAmmoTimer -= Time.deltaTime;
+
                 if (noAmmoTimer <= 0)
                 {
                     noAmmoText.gameObject.SetActive(false);
@@ -185,12 +235,32 @@ namespace AdventureGame
         }
 
         // ======================
+        // PUBLIC
+        // ======================
+
+        public void AddArrows(int amount)
+        {
+            currentArrows =
+                Mathf.Clamp(
+                    currentArrows + amount,
+                    0,
+                    maxArrows
+                );
+
+            UpdateAmmoText();
+        }
+
+        // ======================
         // DEBUG
         // ======================
+
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position, autoAimRadius);
+            Gizmos.DrawWireSphere(
+                transform.position,
+                autoAimRadius
+            );
         }
     }
 }

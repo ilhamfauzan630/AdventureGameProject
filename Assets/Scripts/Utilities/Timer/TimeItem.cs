@@ -7,11 +7,13 @@ namespace AdventureGame
         [Header("Time Bonus")]
         public float extraTime = 10f;
 
-        [HideInInspector]
-        public TimeItemSpawner spawner;
+        [HideInInspector] public TimeItemSpawner spawner;
 
-        [HideInInspector]
-        public Transform spawnPoint;
+        [HideInInspector] public Transform spawnPoint;
+
+        [SerializeField] private GameObject collectEffectPrefab;
+
+        [SerializeField] private AudioClip collectSound;
 
         private void OnTriggerEnter(Collider other)
         {
@@ -25,6 +27,20 @@ namespace AdventureGame
                 {
                     spawner.ItemCollected(spawnPoint);
                 }
+
+                AudioSource.PlayClipAtPoint(
+                    collectSound,
+                    transform.position
+                );
+
+                GameObject effect =
+                Instantiate(
+                    collectEffectPrefab,
+                    transform.position,
+                    Quaternion.identity
+                );
+
+                Destroy(effect, 2f);
 
                 // Hancurkan item
                 Destroy(gameObject);

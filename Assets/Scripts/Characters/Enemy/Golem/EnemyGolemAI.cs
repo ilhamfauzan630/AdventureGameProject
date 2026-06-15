@@ -5,7 +5,7 @@ public class EnemyGolemAI : MonoBehaviour
 {
     [Header("Target")]
     public Transform player;
-    
+
     [Header("Hitbox")]
     public GameObject punchHitbox;
 
@@ -21,40 +21,73 @@ public class EnemyGolemAI : MonoBehaviour
 
     [Header("Attack")]
     public float attackCooldown = 2f;
-    private float lastAttackTime;
 
     [Header("Rotation")]
     public float rotationSpeed = 5f;
 
+    private float lastAttackTime;
+
     private NavMeshAgent agent;
     private Animator animator;
+
     private bool isAttacking;
 
-    void Start()
+    private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
-        agent.stoppingDistance = attackRange - 0.2f;
+
+        agent.stoppingDistance = attackRange * 0.8f;
+
+        if (punchHitbox != null)
+        {
+            punchHitbox.SetActive(false);
+        }
     }
 
-    void Update()
+    private void Update()
     {
-        float distance = Vector3.Distance(transform.position, player.position);
+        if (player == null)
+            return;
 
-        if (isAttacking) return;
+        float distance =
+            Vector3.Distance(
+                transform.position,
+                player.position
+            );
+        Debug.Log($"Distance={distance} | Attacking={isAttacking} | Stopped={agent.isStopped} | Remaining={agent.remainingDistance}");
 
-        if (distance <= attackRange)
+        // Selalu update tujuan selama player masih terdeteksi
+        if (!isAttacking &&
+            distance <= detectRange)
+        {
+            agent.SetDestination(
+                player.position
+            );
+        }
+
+        if (isAttacking)
+        {
+            RotateToPlayer();
+            return;
+        }
+
+        // Attack
+        if (distance <= attackRange + 0.3f)
         {
             Attack();
         }
+        // Run
         else if (distance <= runRange)
         {
             Run();
         }
+        // Walk
         else if (distance <= detectRange)
         {
             Walk();
         }
+        // Idle
         else
         {
             Idle();
@@ -64,81 +97,119 @@ public class EnemyGolemAI : MonoBehaviour
         UpdateAnimation();
     }
 
-    void Idle()
+    private void Idle()
     {
         agent.isStopped = true;
+
         animator.SetBool("IsWalk", false);
         animator.SetBool("IsRun", false);
     }
 
-    void Walk()
+    private void Walk()
     {
         agent.isStopped = false;
         agent.speed = walkSpeed;
-        agent.SetDestination(player.position);
 
         animator.SetBool("IsWalk", true);
         animator.SetBool("IsRun", false);
     }
 
-    void Run()
+    private void Run()
     {
         agent.isStopped = false;
         agent.speed = runSpeed;
-        agent.SetDestination(player.position);
 
         animator.SetBool("IsWalk", false);
         animator.SetBool("IsRun", true);
     }
 
-    void Attack()
+    private void Attack()
     {
-        if (Time.time < lastAttackTime + attackCooldown) return;
+        if (Time.time < lastAttackTime + attackCooldown)
+            return;
 
         isAttacking = true;
+
         agent.isStopped = true;
 
         animator.SetBool("IsWalk", false);
         animator.SetBool("IsRun", false);
+
         animator.SetTrigger("Punch");
         animator.SetBool("IsAttacking", true);
 
         lastAttackTime = Time.time;
+
+        Debug.Log("👊 Golem Attack!");
     }
 
+    // Animation Event
     public void EnablePunchHitbox()
     {
-        if (punchHitbox) punchHitbox.SetActive(true);
-    }
-
-    public void DisablePunchHitbox()
-    {
-        if (punchHitbox) punchHitbox.SetActive(false);
-    }
-    public void EndAttack()
-    {
-        isAttacking = false;
-        animator.SetBool("IsAttacking", false);
-    }
-
-    void RotateToPlayer()
-    {
-        Vector3 direction = (player.position - transform.position).normalized;
-        direction.y = 0;
-
-        if (direction != Vector3.zero)
+        if (punchHitbox != null)
         {
-            Quaternion lookRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(
-                transform.rotation,
-                lookRotation,
-                Time.deltaTime * rotationSpeed
-            );
+            punchHitbox.SetActive(true);
         }
     }
 
-    void UpdateAnimation()
+    // Animation Event
+    public void DisablePunchHitbox()
     {
-        animator.SetFloat("Speed", agent.velocity.magnitude);
+        if (punchHitbox != null)
+        {
+            punchHitbox.SetActive(false);
+        }
+    }
+
+    // Animation Event
+    public void EndAttack()
+    {
+        isAttacking = false;
+
+        agent.isStopped = false;
+
+        // Paksa update tujuan lagi
+        if (player != null)
+        {
+            agent.SetDestination(
+                player.position
+            );
+        }
+
+        animator.SetBool(
+            "IsAttacking",
+            false
+        );
+
+        Debug.Log("✅ End Attack");
+    }
+
+    private void RotateToPlayer()
+    {
+        Vector3 direction =
+            (player.position - transform.position).normalized;
+
+        direction.y = 0f;
+
+        if (direction == Vector3.zero)
+            return;
+
+        Quaternion lookRotation =
+            Quaternion.LookRotation(direction);
+
+        transform.rotation =
+            Quaternion.Slerp(
+                transform.rotation,
+                lookRotation,
+                rotationSpeed * Time.deltaTime
+            );
+    }
+
+    private void UpdateAnimation()
+    {
+        animator.SetFloat(
+            "Speed",
+            agent.velocity.magnitude
+        );
     }
 }

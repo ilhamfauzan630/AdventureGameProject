@@ -12,12 +12,15 @@ namespace AdventureGame
         public GameObject arrowPrefab;
         public Transform shootPoint;
         public float arrowSpeed = 15f;
-        public float shootInterval = 0.5f; // ⏱️ waktu jeda antar tembakan
+        public float shootInterval = 0.5f;
 
         private Transform targetPlayer;
         private float shootTimer;
 
-        // 🧠 Animator
+        [Header("Optimization")]
+        public float detectionInterval = 0.2f;
+
+        // Animator
         private Animator animator;
         private bool isShooting;
 
@@ -26,10 +29,17 @@ namespace AdventureGame
             animator = GetComponent<Animator>();
         }
 
+        private void Start()
+        {
+            InvokeRepeating(
+                nameof(DetectPlayer),
+                0f,
+                detectionInterval
+            );
+        }
+
         private void Update()
         {
-            DetectPlayer();
-
             if (targetPlayer != null)
             {
                 AimAtPlayer();
@@ -41,7 +51,6 @@ namespace AdventureGame
                 isShooting = false;
             }
 
-            // ⏱️ hitung mundur timer
             if (shootTimer > 0f)
             {
                 shootTimer -= Time.deltaTime;
@@ -50,7 +59,12 @@ namespace AdventureGame
 
         private void DetectPlayer()
         {
-            Collider[] hits = Physics.OverlapSphere(transform.position, detectionRadius, playerLayer);
+            Collider[] hits = Physics.OverlapSphere(
+                transform.position,
+                detectionRadius,
+                playerLayer
+            );
+
             if (hits.Length > 0)
             {
                 targetPlayer = hits[0].transform;
@@ -63,54 +77,86 @@ namespace AdventureGame
 
         private void AimAtPlayer()
         {
-            Vector3 direction = (targetPlayer.position - transform.position).normalized;
-            direction.y = 0;
+            Vector3 direction =
+                (targetPlayer.position - transform.position).normalized;
+
+            direction.y = 0f;
+
             if (direction != Vector3.zero)
             {
-                Quaternion lookRot = Quaternion.LookRotation(direction);
-                transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, Time.deltaTime * 5f);
+                Quaternion lookRot =
+                    Quaternion.LookRotation(direction);
+
+                transform.rotation =
+                    Quaternion.Slerp(
+                        transform.rotation,
+                        lookRot,
+                        Time.deltaTime * 5f
+                    );
             }
         }
 
         private void HandleShooting()
         {
-            // 🟡 Pastikan musuh tidak langsung spam shoot, tunggu jeda
             if (shootTimer <= 0f && !isShooting)
             {
                 isShooting = true;
                 animator.SetBool("IsShooting", true);
-                // Animasi shoot akan memanggil event ShootArrowEvent dan EndShootEvent
+
+                // Animation Event:
+                // ShootArrowEvent()
+                // EndShootEvent()
             }
         }
 
-        // 📌 Dipanggil dari Animation Event di tengah animasi shoot
+        // Dipanggil dari Animation Event
         public void ShootArrowEvent()
         {
-            if (targetPlayer == null) return;
+            if (targetPlayer == null)
+                return;
 
-            Debug.Log("🎯 EnemyArcher: ShootArrowEvent triggered!");
+            Debug.Log(
+                "🎯 EnemyArcher: ShootArrowEvent triggered!"
+            );
 
-            GameObject arrow = Instantiate(arrowPrefab, shootPoint.position, shootPoint.rotation);
+            GameObject arrow = Instantiate(
+                arrowPrefab,
+                shootPoint.position,
+                shootPoint.rotation
+            );
+
             Rigidbody rb = arrow.GetComponent<Rigidbody>();
 
-            Vector3 dir = (targetPlayer.position - shootPoint.position).normalized;
-            rb.velocity = dir * arrowSpeed;
+            if (rb != null)
+            {
+                Vector3 dir =
+                    (targetPlayer.position - shootPoint.position).normalized;
+
+                rb.velocity = dir * arrowSpeed;
+            }
         }
 
-        // 📌 Dipanggil dari akhir animasi shoot
+        // Dipanggil dari akhir animasi
         public void EndShootEvent()
         {
             isShooting = false;
-            animator.SetBool("IsShooting", false);
 
-            // Reset timer agar musuh tidak langsung menembak lagi
+            animator.SetBool(
+                "IsShooting",
+                false
+            );
+
             shootTimer = shootInterval;
         }
 
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, detectionRadius);
+
+            Gizmos.DrawWireSphere(
+                transform.position,
+                detectionRadius
+            );
         }
     }
 }

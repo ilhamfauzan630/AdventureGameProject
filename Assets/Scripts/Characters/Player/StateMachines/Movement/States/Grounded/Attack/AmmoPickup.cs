@@ -6,11 +6,13 @@ namespace AdventureGame
     {
         public int ammoAmount = 5;
 
-        [HideInInspector]
-        public AmmoSpawner spawner;
+        [HideInInspector] public AmmoSpawner spawner;
 
-        [HideInInspector]
-        public Transform spawnPoint;
+        [HideInInspector] public Transform spawnPoint;
+
+        [SerializeField] private GameObject collectEffectPrefab;
+
+        [SerializeField] private AudioClip collectSound;
 
         private void OnTriggerEnter(Collider other)
         {
@@ -37,6 +39,20 @@ namespace AdventureGame
                     {
                         spawner.AmmoCollected(spawnPoint);
                     }
+
+                    AudioSource.PlayClipAtPoint(
+                        collectSound,
+                        transform.position
+                    );
+
+                    GameObject effect =
+                        Instantiate(
+                            collectEffectPrefab,
+                            transform.position,
+                            Quaternion.identity
+                        );
+
+                    Destroy(effect, 2f);
 
                     Destroy(gameObject);
                 }

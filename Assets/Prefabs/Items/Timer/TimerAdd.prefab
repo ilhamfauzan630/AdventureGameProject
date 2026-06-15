@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1719097175660668040}
   - component: {fileID: 8981178914464066677}
   - component: {fileID: 3630940816653691739}
+  - component: {fileID: 6711784411346796265}
   m_Layer: 0
   m_Name: TimerAdd
   m_TagString: Untagged
@@ -74,6 +75,8 @@ MonoBehaviour:
   extraTime: 10
   spawner: {fileID: 0}
   spawnPoint: {fileID: 0}
+  collectEffectPrefab: {fileID: 2781953894064657089, guid: 211d89eb0af485c419c733d93c9df4ef, type: 3}
+  collectSound: {fileID: 8300000, guid: a8c94af818a7cd94db32ee794f4243b7, type: 3}
 --- !u!114 &3630940816653691739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,6 +92,18 @@ MonoBehaviour:
   rotationSpeed: 90
   floatHeight: 0.25
   floatSpeed: 2
+--- !u!114 &6711784411346796265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230439723485323233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bdc70d7d76ec0947be90ba2163b9442, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2333649066715757590
 GameObject:
   m_ObjectHideFlags: 0

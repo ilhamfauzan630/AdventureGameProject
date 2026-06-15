@@ -289,13 +289,21 @@ MonoBehaviour:
   stages:
   - stageName: World1-PulauHening
     actTitle: "Pulau Hening \u2014 Awal Sang Penjaga"
-    description: "Pulau Hening adalah tempat kelahiran Arka, desa kecil di pesisir
-      Nusantara yang damai.\nNamun, angin membawa firasat aneh \u2014 alam seolah
-      ingin berbicara.\n\nSebagai penerus Busur Leluhur, Arka memulai langkah pertamanya
-      untuk memahami panggilan tersebut.\nDi sini, ia berlatih mengasah fokus dan
-      ketepatan, mempelajari dasar-dasar kemampuan yang kelak menentukan nasib seluruh
-      pulau.\n\nMisi:\nBantu Arka menyelesaikan latihan panah pertama dan buka gerbang
-      perjalanan menuju dunia yang lebih luas."
+    description: 'Pulau Hening adalah tempat kelahiran Arka, desa kecil di pesisir
+      Nusantara yang damai.
+
+      Namun, angin membawa firasat aneh seolah alam
+      ingin berbicara.
+
+
+      Tak lama kemudian, roh-roh misterius mulai bermunculan
+      di sekitar desa. Kehadiran mereka membuat warga resah dan mengganggu ketenangan
+      yang selama ini terjaga.
+
+
+      Sebagai penerus Busur Leluhur, Arka memutuskan
+      untuk menghadapi ancaman tersebut. Bantulah Arka mengalahkan roh-roh yang bermunculan
+      dan melindungi Pulau Hening dari bahaya yang semakin mendekat.'
     stageID: 1
     stageButton: {fileID: 2116146068}
     stageImage: {fileID: 2116146069}
@@ -303,12 +311,22 @@ MonoBehaviour:
     lockedSprite: {fileID: 21300000, guid: e45f9ef5872bc5546b79759e93d76023, type: 3}
   - stageName: World2-PulauRimba
     actTitle: "Pulau Rimba \u2014 Bisikan Roh Hutan"
-    description: "Setelah meninggalkan desa, Arka tiba di Pulau Rimba \u2014 hutan
-      tropis yang padat dan dipenuhi misteri tua.\nKabut tipis menyelimuti pepohonan,
-      dan suara roh alam bergaung di antara dedaunan.\n\nTotem Roh kuno di pulau
-      ini mulai tidak stabil, seolah meminta bantuan.\nHanya mereka yang mampu membaca
-      urutan cahaya dan keseimbangan yang dapat menenangkan pergerakan roh.\n\nMisi:\nPecahkan
-      teka-teki Totem Roh dan buktikan bahwa Arka layak disebut Penjaga Alam."
+    description: 'Setelah meninggalkan desa, Arka tiba di Pulau Rimba, hutan tropis
+      yang padat dan dipenuhi misteri tua.
+
+      Kabut tipis menyelimuti pepohonan,
+      dan suara roh alam bergaung di antara dedaunan.
+
+
+      Namun, kedamaian pulau
+      ini telah terusik. Roh-roh yang kehilangan kendali mulai merasuki warga sekitar,
+      membuat mereka bertindak di luar kesadaran dan meninggalkan kehidupan mereka
+      seperti biasa.
+
+
+      Bantulah Arka menghadapi roh-roh tersebut dan membebaskan
+      para warga dari pengaruh kegelapan, agar mereka dapat kembali menjalani kehidupan
+      dengan damai.'
     stageID: 2
     stageButton: {fileID: 1407379624}
     stageImage: {fileID: 1407379625}
@@ -316,13 +334,21 @@ MonoBehaviour:
     lockedSprite: {fileID: 21300000, guid: e45f9ef5872bc5546b79759e93d76023, type: 3}
   - stageName: World3-PulauPenjaga
     actTitle: "Pulau Penjaga \u2014 Arca Terbangun"
-    description: "Perjalanan Arka membawanya ke pulau terakhir \u2014 puncak batu
-      kuno tempat para leluhur menyegel kekuatan besar.\nNamun segel itu kini melemah.\nObor-obor
-      penjaga meredup, dan Arca raksasa yang selama ratusan tahun tertidur mulai
-      terbangun.\n\nHanya Cahaya Leluhur yang dapat membuka jalan menuju arena suci\u2026
-      dan hanya keberanian sejati yang dapat mengakhiri kekacauan yang akan bangkit.\n\nMisi:\nNyalakan
-      empat obor batu menggunakan panah cahaya dan hadapi Arca Penjaga dalam pertarungan
-      klimaks."
+    description: 'Perjalanan Arka membawanya ke pulau terakhir, puncak batu kuno
+      tempat para leluhur menyegel kekuatan besar.
+
+      Namun, segel itu kini melemah,
+      menyebabkan Golem Penjaga yang telah tertidur selama ratusan tahun kembali
+      terbangun.
+
+
+      Kebangkitan golem tersebut mengancam keselamatan pulau dan
+      mengganggu keseimbangan yang telah dijaga oleh para leluhur sejak lama.
+
+
+      Bantulah
+      Arka menghadapi dan mengalahkan Golem Penjaga untuk menghentikan kekacauan
+      yang ditimbulkannya serta mengembalikan kedamaian di pulau terakhir.'
     stageID: 3
     stageButton: {fileID: 324736777}
     stageImage: {fileID: 324736778}

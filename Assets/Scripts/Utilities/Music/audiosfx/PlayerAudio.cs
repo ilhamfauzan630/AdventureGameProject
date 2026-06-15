@@ -30,8 +30,6 @@ namespace AdventureGame
 
         public void StartRun()
         {
-            // Jika sudah memainkan runClip normal,
-            // tidak perlu melakukan apa-apa.
             if (audioSource.isPlaying &&
                 audioSource.clip == runClip &&
                 audioSource.pitch == 1f)
@@ -54,8 +52,6 @@ namespace AdventureGame
 
         public void StartRunFast()
         {
-            // Jika sudah memainkan runFastClip,
-            // jangan restart audionya.
             if (audioSource.isPlaying &&
                 audioSource.clip == runFastClip)
             {

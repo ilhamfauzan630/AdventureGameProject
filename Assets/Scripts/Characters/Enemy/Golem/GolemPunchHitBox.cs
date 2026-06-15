@@ -10,16 +10,19 @@ namespace AdventureGame
 
         private void OnTriggerEnter(Collider other)
         {
-            // Pastikan yang kena adalah Player atau punya Health
-            if (other.CompareTag("Player") || other.GetComponentInParent<Health>() != null)
-            {
-                Health health = other.GetComponentInParent<Health>();
+            if (!other.CompareTag("Player"))
+                return;
 
-                if (health != null)
-                {
-                    health.ApplyDamage(damage);
-                    Debug.Log($"👊 Player kena pukul! Damage: {damage}, Sisa HP: {health.CurrentHealth}");
-                }
+            Health health =
+                other.GetComponentInParent<Health>();
+
+            if (health != null)
+            {
+                health.ApplyDamage(damage);
+
+                Debug.Log(
+                    $"👊 Player kena pukul! Damage: {damage}, Sisa HP: {health.CurrentHealth}"
+                );
             }
         }
     }

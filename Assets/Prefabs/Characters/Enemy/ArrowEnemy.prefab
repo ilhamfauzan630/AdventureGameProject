@@ -151,10 +151,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 271eb80739dec844ca9e4473a0ca4f71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifetime: 5
+  speed: 25
+  trackingStrength: 10
+  predictionTime: 0.3
   damage: 10
-  speed: 10
-  trackingStrength: 2
+  lifetime: 5
 --- !u!114 &1595791223414591918
 MonoBehaviour:
   m_ObjectHideFlags: 0

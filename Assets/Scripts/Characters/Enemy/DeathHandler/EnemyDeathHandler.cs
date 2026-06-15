@@ -33,6 +33,13 @@ namespace AdventureGame
 
             Debug.Log("☠ Enemy mati!");
 
+            Debug.Log("☠ Enemy mati!");
+
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.AddPoints(25);
+            }
+
             // Animasi mati
             animator.SetTrigger("Die");
 
