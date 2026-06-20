@@ -14,6 +14,7 @@ namespace AdventureGame
         [Header("UI")]
         public TextMeshProUGUI timerText;
         public GameObject winPanel;
+        public GameObject failedPanel;
 
         [Header("Result UI")]
         public TextMeshProUGUI scoreText;
@@ -25,6 +26,9 @@ namespace AdventureGame
 
         [Header("Final Stage")]
         public bool isFinalStage = false;
+
+        [Header("Stage Objective")]
+        public int requiredHits = 1;
 
         private int collectedBonusTime = 0;
 
@@ -89,16 +93,29 @@ namespace AdventureGame
             GameEnded = true;
             timerRunning = false;
 
-            Debug.Log("Waktu habis!");
-
-            // ambil data
             int hitScore = GameManager.Instance.HitCount;
-            int timeBonus = collectedBonusTime;
 
-            // contoh total score
+            Debug.Log("Hit Score = " + hitScore);
+            Debug.Log("Required Hits = " + requiredHits);
+            if (hitScore < requiredHits)
+            {
+                if (failedPanel != null)
+                    failedPanel.SetActive(true);
+
+                Time.timeScale = 0f;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+
+                return;
+            }
+
+            // =====================
+            // WIN
+            // =====================
+
+            int timeBonus = collectedBonusTime;
             int totalScore = (hitScore * 100) + (timeBonus * 10);
 
-            // update UI result
             if (scoreText != null)
                 scoreText.text = "Target Hit : " + hitScore;
 
@@ -108,33 +125,10 @@ namespace AdventureGame
             if (totalScoreText != null)
                 totalScoreText.text = "Total Score : " + totalScore;
 
-            // =========================
-            // UNLOCK NEXT STAGE
-            // =========================
-
-            int currentUnlocked = PlayerPrefs.GetInt("UnlockedStage", 1);
-
-            if (nextStageToUnlock > currentUnlocked)
-            {
-                PlayerPrefs.SetInt("UnlockedStage", nextStageToUnlock);
-                PlayerPrefs.Save();
-
-                Debug.Log("Stage baru terbuka: " + nextStageToUnlock);
-            }
-
-            // tampilkan panel
             if (winPanel != null)
                 winPanel.SetActive(true);
 
-            // jika stage terakhir selesai
-            if (isFinalStage)
-            {
-                PlayerPrefs.SetInt("GameFinished", 1);
-                PlayerPrefs.Save();
-            }
-            
             Time.timeScale = 0f;
-
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
