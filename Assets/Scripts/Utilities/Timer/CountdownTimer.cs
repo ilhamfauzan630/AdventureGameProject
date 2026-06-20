@@ -125,6 +125,16 @@ namespace AdventureGame
             if (totalScoreText != null)
                 totalScoreText.text = "Total Score : " + totalScore;
 
+            int currentUnlocked = PlayerPrefs.GetInt("UnlockedStage", 1);
+
+            if (nextStageToUnlock > currentUnlocked)
+            {
+                PlayerPrefs.SetInt("UnlockedStage", nextStageToUnlock);
+                PlayerPrefs.Save();
+
+                Debug.Log("Stage baru terbuka: " + nextStageToUnlock);
+            }
+            
             if (winPanel != null)
                 winPanel.SetActive(true);
 
