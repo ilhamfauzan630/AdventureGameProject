@@ -59,4 +59,4 @@ Completed as a university thesis project.
 Muhammad Ilham Fauzan
 
 - GitHub: https://github.com/ilhamfauzan630
-- LinkedIn: https://www.linkedin.com/in/fauzanilham/# The Spirit of Nuswantoro
+- LinkedIn: https://www.linkedin.com/in/fauzanilham/
