@@ -134,6 +134,14 @@ namespace AdventureGame
 
                 Debug.Log("Stage baru terbuka: " + nextStageToUnlock);
             }
+
+            if (isFinalStage)
+            {
+                PlayerPrefs.SetInt("GameFinished", 1);
+                PlayerPrefs.Save();
+
+                Debug.Log("Game Finished!");
+            }
             
             if (winPanel != null)
                 winPanel.SetActive(true);
